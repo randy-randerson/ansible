@@ -18,13 +18,14 @@
     group: radarr
 
 - name: Download radarr
-  shell:
-    cmd: 'curl -L -O $( curl -s https://api.github.com/repos/Radarr/Radarr/releases | grep linux.tar.gz | grep browser_download_url | head -1 | cut -d \" -f 4 )'
-    chdir: /tmp
+  get_url:
+    url: https://github.com/Radarr/Radarr/releases/download/v0.2.0.1450/Radarr.develop.0.2.0.1450.linux.tar.gz
+    dest: /tmp
+    mode: 0766
 
 - name: Unpack Radarr
   unarchive:
-    src: /tmp/Radarr.develop.0.2.0.1480.linux.tar.gz
+    src: /tmp/Radarr.develop.0.2.0.1450.linux.tar.gz
     group: radarr
     owner: radarr
     dest: /tmp
