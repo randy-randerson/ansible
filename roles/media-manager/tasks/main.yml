@@ -1,0 +1,6 @@
+---
+- import_tasks: install-sonarr.yml
+  tags: sonarr
+
+- import_tasks: install-radarr.yml
+  tags: radarr

@@ -1,0 +1,9 @@
+- name: Install Pip
+  yum:
+    name: python-pip
+    state: present
+
+- name: Update Pip
+  pip:
+    name: pip
+    state: latest

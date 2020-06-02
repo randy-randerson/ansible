@@ -1,0 +1,61 @@
+---
+
+- name: Install Packages
+  yum:
+    name: mono-locale-extras
+    state: latest
+
+- name: Add Radarr User
+  user:
+    name: radarr
+    shell: /sbin/nologin
+
+- name: Create Radarr Dir
+  file:
+    path: /opt/Radarr
+    state: directory
+    owner: radarr
+    group: radarr
+
+- name: Download radarr
+  shell:
+    cmd: 'curl -L -O $( curl -s https://api.github.com/repos/Radarr/Radarr/releases | grep linux.tar.gz | grep browser_download_url | head -1 | cut -d \" -f 4 )'
+    chdir: /tmp
+
+- name: Unpack Radarr
+  unarchive:
+    src: /tmp/Radarr.develop.0.2.0.1480.linux.tar.gz
+    group: radarr
+    owner: radarr
+    dest: /tmp
+    extra_opts:
+    remote_src: yes
+#  with_fileglob:
+#    - '/tmp/*.linux.tar.gz'
+    
+- name: Move Radarr Directory
+  copy:
+    src: /tmp/Radarr/
+    dest: /opt/Radarr
+    group: radarr
+    owner: radarr
+    remote_src: yes
+
+- name: Copy Service File
+  template:
+    src: radarr.service.j2
+    dest: /etc/systemd/system/radarr.service
+
+- name: Add Radarr Port
+  firewalld:
+    port: 7878/tcp
+    state: enabled
+    permanent: yes
+
+- name: Enable Radarr Service
+  systemd:
+    name: radarr
+    daemon_reload: yes
+    enabled: yes
+    state: started
+  notify: Reload Firewalld
