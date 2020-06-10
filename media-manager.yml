@@ -13,8 +13,12 @@
         path: /Media
         src: 192.168.1.33:/mnt/user/Media
         fstype: nfs
-        opts: auto,noatime,nofail
+        opts: _netdev,defaults,auto,noatime,nofail
         state: mounted
   roles:
+    - epel
+    - pip
+    - docker
+    - docker-compose
     - media-manager
 

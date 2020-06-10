@@ -4,3 +4,9 @@
 
 - import_tasks: install-radarr.yml
   tags: radarr
+
+- import_tasks: install-nordvpn.yml
+  tags: nordvpn
+
+- import_tasks: install-deluge.yml
+  tags: deluge

@@ -1,0 +1,32 @@
+---
+
+- name: Download Nux Repo
+  get_url:
+    url: http://li.nux.ro/download/nux/dextop/el7/x86_64/nux-dextop-release-0-5.el7.nux.noarch.rpm
+    dest: /tmp
+    mode: 0777
+
+#- name: Install Nux
+#  shell: rpm -ivh nux-dextop-release-0-5.el7.nux.noarch.rpm
+#  args:
+#    chdir: /tmp
+
+- name: Install Deluge Web
+  yum:
+    name: deluge-web
+    state: latest
+
+- name: Enable Deluge Web
+  systemd:
+    enabled: yes
+    daemon_reload: yes
+    state: started
+    name: deluge-web
+
+- name: Add Deluge Firewall Rule
+  firewalld:
+    port: 8112/tcp
+    permanent: yes
+    zone: public
+    state: enabled
+  notify: Reload Firewalld
