@@ -1,0 +1,13 @@
+---
+
+- name: Docker Wait
+  docker_container_info:
+    name: postgres
+  register: result
+  until: ("running" in result.container.State.Status)
+  retries: 120
+  delay: 10
+  failed_when: "result.container.State.Status != 'running'"
+
+- debug:
+    msg: "{{ result.container.State.Status }}"

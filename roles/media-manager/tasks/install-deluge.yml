@@ -6,10 +6,10 @@
     dest: /tmp
     mode: 0777
 
-#- name: Install Nux
-#  shell: rpm -ivh nux-dextop-release-0-5.el7.nux.noarch.rpm
-#  args:
-#    chdir: /tmp
+- name: Install Nux
+  shell: rpm -ivh nux-dextop-release-0-5.el7.nux.noarch.rpm
+  args:
+    chdir: /tmp
 
 - name: Install Deluge Web
   yum:

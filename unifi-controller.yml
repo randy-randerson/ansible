@@ -1,0 +1,6 @@
+---
+
+- name: Install or Upgrade Unifi Controller
+  hosts: unifi
+  roles:
+    - unifi-controller

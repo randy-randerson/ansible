@@ -1,0 +1,35 @@
+---
+
+#- name: Pull Latest
+#  docker_image:
+#    name: linuxserver/unifi-controller
+#    source: pull
+
+- name: Remove Container
+  docker_container:
+    name: unifi-controller
+    state: absent
+  when: "upgrade == 'True'"
+
+- name: Run Unifi Controller
+  docker_container:
+    name: unifi-controller
+    image: linuxserver/unifi-controller
+    pull: yes
+    state: started
+    restart_policy: unless-stopped
+    ports:
+      - "3478:3478/udp"
+      - "10001:10001/udp"
+      - "8080:8080"
+      - "8443:8443"
+      - "8843:8843"
+      - "8880:8880"
+      - "6789:6789"
+      - "8081:8081"
+    env:
+      PUID: "99"
+      PGUID: "100"
+      MEM_LIMIT: "1024M"
+    volumes:
+      - /mnt/user/appdata/unifi:/config
