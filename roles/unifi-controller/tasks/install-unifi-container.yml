@@ -1,9 +1,13 @@
 ---
 
-#- name: Pull Latest
-#  docker_image:
-#    name: linuxserver/unifi-controller
-#    source: pull
+- name: Install Docker Pip Package
+  pip:
+    name: "{{ item }}"
+    state: present
+    extra_args: --ignore-installed PyYAML
+  loop:
+    - docker
+    - docker-compose
 
 - name: Remove Container
   docker_container:
