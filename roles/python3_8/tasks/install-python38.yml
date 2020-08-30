@@ -1,0 +1,23 @@
+---
+
+- name: Install Packages
+  yum:
+    name: ['gcc', 'openssl-devel', 'bzip2-devel', 'libffi-devel', 'sqlite-devel']
+    state: present
+
+- name: Download Python 3.8
+  unarchive:
+    src: https://www.python.org/ftp/python/3.8.5/Python-3.8.5.tgz
+    dest: /usr/src
+    remote_src: yes
+
+- name: Install Python 3.8
+  shell:
+    cmd: ./configure --enable-optimizations --enable-loadable-sqlite-extensions && make altinstall
+    chdir: /usr/src/Python-3.8.5
+    creates: /usr/local/bin/python3.8
+
+- name: Cleanup Install Files
+  file:
+    path: /usr/src/Python-3.8.5.tgz
+    state: absent
