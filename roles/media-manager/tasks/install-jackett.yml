@@ -1,0 +1,53 @@
+---
+
+- name: Add Jackett User
+  user:
+    name: jackett
+    shell: /sbin/nologin
+
+- name: Create Jackett Dir
+  file:
+    path: /opt/Jackett
+    state: directory
+    owner: jackett
+    group: jackett
+
+- name: Install Pre-reqs
+  yum:
+    name: libicu
+    state: present
+
+- name: Download Jackett
+  unarchive:
+    src: https://github.com/Jackett/Jackett/releases/download/v0.16.1045/Jackett.Binaries.LinuxAMDx64.tar.gz
+    dest: /opt/Jackett
+    remote_src: yes
+
+- name: Install Jackett
+  command: ./install_service_systemd.sh
+  args:
+    chdir: /opt/Jackett/Jackett
+
+- name: Copy Jackett Service File
+  template:
+    src: jackett.service.j2
+    dest: /etc/systemd/system/jackett.service
+
+- name: Enable Jacket Service
+  systemd:
+    name: jackett
+    daemon_reload: yes
+    enabled: yes
+    state: started
+
+- name: Add Jackett Port
+  firewalld:
+    port: 9117/tcp
+    permanent: yes
+    state: enabled
+  notify: Reload Firewalld
+
+- name: Cleanup Install Files
+  file:
+    path: /opt/Jacket/Jackett.Binaries.LinuxAMDx64.tar.gz
+    state: absent

@@ -10,3 +10,6 @@
 
 - import_tasks: install-deluge.yml
   tags: deluge
+
+- import_tasks: install-jackett.yml
+  tags: jackett
