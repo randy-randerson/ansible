@@ -1,0 +1,31 @@
+docker run \
+        --name=pihole \
+        --hostname=ba971902b7bb \
+        --mac-address=02:42:ac:11:00:03 \
+        --env=PATH=/opt/pihole:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin \
+        --env=PIHOLE_ARCH=amd64 \
+        --env=S6OVERLAY_RELEASE=https://github.com/just-containers/s6-overlay/releases/download/v1.22.1.0/s6-overlay-amd64.tar.gz \
+        --env=PIHOLE_INSTALL=/root/ph_install.sh \
+        --env=PHP_ENV_CONFIG=/etc/lighttpd/conf-enabled/15-fastcgi-php.conf \
+        --env=PHP_ERROR_LOG=/var/log/lighttpd/error.log \
+        --env=IPv6=True \
+        --env=S6_LOGGING=0 \
+        --env=S6_KEEP_ENV=1 \
+        --env=S6_BEHAVIOUR_IF_STAGE2_FAILS=2 \
+        --env=ServerIP=0.0.0.0 \
+        --env=FTL_CMD=no-daemon \
+        --env=DNSMASQ_USER=root \
+        --env=VERSION=v5.1.2 \
+        --volume=etc-pihole:/etc/pihole/ \
+        --volume=etc-dnsmasq:/etc/dnsmasq.d/ \
+        -p 53:53 \
+        -p 80:80 \
+        -p 67:67/udp \
+        -p 443:443 \
+        -p 53:53/udp \
+        --restart=always \
+        --label='url=https://www.github.com/pi-hole/docker-pi-hole' \
+        --label='maintainer=adam@diginc.us' \
+        --label='image=pihole/pihole:v5.1.2_amd64' \
+        --detach=true \
+        pihole/pihole:latest
