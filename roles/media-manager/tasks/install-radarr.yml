@@ -42,8 +42,8 @@
 
 - name: Copy Service File
   template:
-    src: radarr.service.j2
-    dest: /etc/systemd/system/radarr.service
+    src: Radarr.service.j2
+    dest: /etc/systemd/system/Radarr.service
 
 - name: Add Radarr Port
   firewalld:
@@ -53,7 +53,7 @@
 
 - name: Enable Radarr Service
   systemd:
-    name: radarr
+    name: Radarr
     daemon_reload: yes
     enabled: yes
     state: started
