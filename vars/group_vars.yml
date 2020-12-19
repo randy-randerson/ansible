@@ -1,0 +1,3 @@
+---
+ansible_ssh_user: root
+radarr_version: 3.0.1.4259

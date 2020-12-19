@@ -1,9 +1,8 @@
 ---
 - name: Media Manager
-  hosts: manager
-  vars:
-    ansible_ssh_user: root
-#    ansible_ssh_pass: blu2013!
+  hosts: manager 
+  vars_files:
+    - vars/group_vars.yml
   post_tasks:
     - name: Create Media Mount Point
       command: mkdir -p /Media
