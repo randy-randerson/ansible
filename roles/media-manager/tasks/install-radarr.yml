@@ -19,20 +19,18 @@
 
 - name: Download radarr
   get_url:
-    url: https://github.com/Radarr/Radarr/releases/download/v0.2.0.1450/Radarr.develop.0.2.0.1450.linux.tar.gz
+    url: 'https://github.com/Radarr/Radarr/releases/download/v{{ radarr_version }}/Radarr.master.{{ radarr_version }}.linux-core-x64.tar.gz'
     dest: /tmp
     mode: 0766
 
 - name: Unpack Radarr
   unarchive:
-    src: /tmp/Radarr.develop.0.2.0.1450.linux.tar.gz
+    src: '/tmp/Radarr.master.{{ radarr_version }}.linux-core-x64.tar.gz'
     group: radarr
     owner: radarr
     dest: /tmp
     extra_opts:
     remote_src: yes
-#  with_fileglob:
-#    - '/tmp/*.linux.tar.gz'
     
 - name: Move Radarr Directory
   copy:
@@ -44,8 +42,8 @@
 
 - name: Copy Service File
   template:
-    src: radarr.service.j2
-    dest: /etc/systemd/system/radarr.service
+    src: Radarr.service.j2
+    dest: /etc/systemd/system/Radarr.service
 
 - name: Add Radarr Port
   firewalld:
@@ -55,8 +53,13 @@
 
 - name: Enable Radarr Service
   systemd:
-    name: radarr
+    name: Radarr
     daemon_reload: yes
     enabled: yes
     state: started
   notify: Reload Firewalld
+
+- name: Cleanup Install Files
+  file:
+    path: '/tmp/Radarr.master.{{ radarr_version }}.linux-core-x64.tar.gz'
+    state: absent
