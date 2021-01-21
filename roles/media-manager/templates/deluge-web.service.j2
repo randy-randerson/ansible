@@ -1,0 +1,12 @@
+[Unit]
+Description=Deluge Bittorrent Client Web Interface
+After=network-online.target
+BindsTo=deluge-daemon.service
+
+[Service]
+User=deluge
+ExecStart=/usr/bin/deluge-web
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target

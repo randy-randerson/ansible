@@ -10,11 +10,22 @@
   shell: rpm -ivh nux-dextop-release-0-5.el7.nux.noarch.rpm
   args:
     chdir: /tmp
+  ignore_errors: true
 
 - name: Install Deluge Web
   yum:
     name: deluge-web
     state: latest
+
+- name: Install Deluge Web Service file
+  template:
+    src: deluge-web.service.j2
+    dest: /etc/systemd/system/deluge-web.service
+
+- name: Install Deluge Daemon Service file
+  template:
+    src: deluge-daemon.service.j2
+    dest: /etc/systemd/system/deluge-daemon.service
 
 - name: Enable Deluge Web
   systemd:
@@ -22,6 +33,13 @@
     daemon_reload: yes
     state: started
     name: deluge-web
+
+- name: Enable Deluge Daemon
+  systemd:
+    enabled: yes
+    daemon_reload: yes
+    state: started
+    name: deluge-daemon
 
 - name: Add Deluge Firewall Rule
   firewalld:
