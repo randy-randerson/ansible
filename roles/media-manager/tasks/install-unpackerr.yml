@@ -1,0 +1,28 @@
+---
+
+- name: Add Unpackerr User
+  user:
+    name: unpackerr
+    shell: /bin/false
+    home: /home/unpackerr
+
+- name: Download Unpackerr
+  get_url:
+    url: 'https://github.com/davidnewhall/unpackerr/releases/download/v{{ unpackerr_version }}/unpackerr-{{ unpackerr_version }}-246.x86_64.rpm'
+    dest: /tmp
+    mode: 0766
+
+- name: Install Unpackerr
+  yum:
+    name: '/tmp/unpackerr-{{ unpackerr_version }}-246.x86_64.rpm'
+    state: present
+
+- name: Install Unpackerr Config File
+  template:
+    src: unpackerr.conf.j2
+    dest: /etc/unpackerr/unpackerr.conf
+
+- name: Restart Unpackerr
+  systemd:
+    state: restarted
+    name: unpackerr

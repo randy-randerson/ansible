@@ -13,3 +13,6 @@
 
 - import_tasks: install-jackett.yml
   tags: jackett
+
+- import_tasks: install-unpackerr.yml
+  tags: unpackerr
