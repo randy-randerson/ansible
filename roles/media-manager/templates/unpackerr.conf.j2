@@ -43,7 +43,7 @@ retry_delay = "5m"
 
 # How many files may be extracted in parallel. 1 works fine.
 # Do not wrap the number in quotes. Raise this only if you have fast disks and CPU.
-parallel = 1
+parallel = 2
 
 # Use these configurations to control the file modes used for newly extracted
 # files and folders. Recommend 0644/0755 or 0666/0777.
@@ -88,14 +88,14 @@ dir_mode = "0777"
  #Default protocols is torrents. Alternative: "torrent,usenet"
    protocols = "torrent"
 
-# Music
-#[[lidarr]]
-#  url = "http://127.0.0.1:8686"
-#  api_key = "32454256defd484ab2fdab2c15bc17af"
-  # File system path where downloaded Lidarr items are located.
-#  paths = ["/downloads"]
-# Default protocols is torrent. Alternative: "torrent,usenet"
-#   protocols = "torrent"
+ #Music
+[[lidarr]]
+  url = "http://127.0.0.1:8686"
+  api_key = "5d7cb5d6d31b48deaa76587171b7327b"
+ # File system path where downloaded Lidarr items are located.
+  paths = ["/Media/CompletedDownloads"]
+#Default protocols is torrent. Alternative: "torrent,usenet"
+   protocols = "torrent"
 
 # Books
 #[[readarr]]
