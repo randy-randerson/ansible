@@ -15,7 +15,7 @@
   user:
     name: lidarr
     shell: /sbin/nologin
-    group: sonarr
+    group: lidarr 
 
 - name: Download Lidarr
   unarchive:
