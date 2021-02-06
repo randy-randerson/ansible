@@ -1,6 +1,6 @@
 ---
 - name: Media Manager
-  hosts: manager 
+  hosts: manager
   vars_files:
     - vars/group_vars.yml
   post_tasks:

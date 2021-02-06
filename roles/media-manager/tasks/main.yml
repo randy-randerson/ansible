@@ -16,3 +16,6 @@
 
 - import_tasks: install-unpackerr.yml
   tags: unpackerr
+
+- import_tasks: install-lidarr.yml
+  tags: lidarr
