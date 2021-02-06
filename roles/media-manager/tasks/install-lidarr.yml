@@ -1,0 +1,54 @@
+---
+
+- name: Add Yum Repo
+  yum_repository:
+    name: mono
+    description: Mono Centos Repo
+    baseurl: http://download.mono-project.com/repo/centos/
+
+- name: Install Packages
+  yum:
+    name: ['wget', 'nfs-utils', 'mediainfo', 'libzen', 'libmediainfo', 'curl', 'gettext', 'mono-core', 'mono-devel', 'sqlite.x86_64', 'git', 'par2cmdline', 'p7zip', 'unzip', 'tar', 'gcc', 'python-feedparser', 'python-cheetah', 'python-dbus', 'python-devel', 'libxslt-devel', 'yum-utils']
+    state: latest
+
+- name: Add Lidarr User
+  user:
+    name: lidarr
+    shell: /sbin/nologin
+    group: sonarr
+
+- name: Download Lidarr
+  unarchive:
+    src: https://github.com/lidarr/Lidarr/releases/download/v0.8.0.2042/Lidarr.develop.0.8.0.2042.linux-core-x64.tar.gz  
+    group: lidarr
+    owner: lidarr
+    dest: /opt
+    extra_opts:
+    remote_src: yes
+
+- name: Change Lidarr Dir Ownership
+  file:
+    path: /opt/Lidarr
+    state: directory
+    recurse: yes
+    owner: lidarr
+    group: lidarr
+
+- name: Copy Service File
+  template:
+    src: lidarr.service.j2
+    dest: /etc/systemd/system/lidarr.service
+
+- name: Add Lidarr Port
+  firewalld:
+    port: 8686/tcp
+    state: enabled
+    permanent: yes
+
+- name: Enable Lidarr Service
+  systemd:
+    name: lidarr
+    daemon_reload: yes
+    enabled: yes
+    state: started
+  notify: Reload Firewalld
