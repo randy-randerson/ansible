@@ -5,7 +5,7 @@ After=syslog.target network.target
 User=sonarr
 Group=sonarr
 Type=simple
-ExecStart=/usr/bin/mono /opt/sonarr/bin/NzbDrone.exe -nobrowser -data /opt/sonarr
+ExecStart=/usr/bin/mono /opt/sonarr/bin/Sonarr.exe -nobrowser -data /opt/sonarr
 TimeoutStopSec=20
 [Install]
 WantedBy=multi-user.target

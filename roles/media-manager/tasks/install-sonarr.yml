@@ -43,7 +43,7 @@
 
 - name: Download Sonarr
   unarchive:
-    src: http://update.sonarr.tv/v2/master/mono/NzbDrone.master.tar.gz
+    src: https://services.sonarr.tv/v1/download/main/latest?version=3&os=linux
     group: sonarr
     owner: sonarr
     dest: /tmp
@@ -52,7 +52,7 @@
 
 - name: Move Sonarr Directory
   copy:
-    src: /tmp/NzbDrone/
+    src: /tmp/Sonarr/
     dest: /opt/sonarr/bin
     group: sonarr
     owner: sonarr
