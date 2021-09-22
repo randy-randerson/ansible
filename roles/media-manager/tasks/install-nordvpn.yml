@@ -1,16 +1,9 @@
 ---
 
 - name: Install NordVPN
-  yum:
-    name: https://repo.nordvpn.com/yum/nordvpn/centos/noarch/Packages/n/nordvpn-release-1.0.0-1.noarch.rpm
-    state: present
+  get_url: 
+        url: https://downloads.nordcdn.com/apps/linux/install.sh
+        dest: /tmp/install.sh
+        mode: 0777
 
-- name: Import GPG Key
-  rpm_key:
-    state: present
-    key: https://repo.nordvpn.com/gpg/nordvpn_public.asc
 
-- name: Install NordVPN Package
-  yum:
-    name: nordvpn
-    state: present

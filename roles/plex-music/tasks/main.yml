@@ -12,6 +12,7 @@
     extra_args: --ignore-installed PyYAML
   loop:
     - docker
+#    - selinux
     #- docker-compose
 
 - name: Remove Container
@@ -19,6 +20,10 @@
     name: PlexMediaServer
     state: absent
   when: "upgrade == 'True'"
+
+#- name: Disable SELinux
+#  ansible.posix.selinux:
+#    state: disabled
 
 - name: Install Plex Container
   docker_container:

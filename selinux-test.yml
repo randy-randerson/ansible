@@ -1,0 +1,10 @@
+---
+
+- name: SElinux test
+  hosts: all
+  connection: local
+  gather_facts: yes
+  tasks:
+    - name: Disable SELinux
+      ansible.posix.selinux:
+        state: disabled
