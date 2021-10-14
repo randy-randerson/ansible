@@ -1,0 +1,9 @@
+---
+
+bazarr_yum_packages:
+  - python3-devel
+  - python3-pip
+  - python36-distutils-extra
+
+bazarr_url: https://github.com/morpheus65535/bazarr/releases/latest/download/bazarr.zip
+bazarr_dir: /opt/bazarr

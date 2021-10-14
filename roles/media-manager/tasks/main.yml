@@ -19,3 +19,6 @@
 
 - import_tasks: install-lidarr.yml
   tags: lidarr
+
+- import_tasks: install-bazarr.yml
+  tags: bazarr
