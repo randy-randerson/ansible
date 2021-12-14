@@ -22,3 +22,6 @@
 
 - import_tasks: install-bazarr.yml
   tags: bazarr
+
+- import_tasks: install-flaresolverr.yml
+  tags: flaresolverr

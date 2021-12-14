@@ -2,8 +2,11 @@
 - name: Media Manager
   hosts: all
   connection: local
+  gather_facts: no
   vars_files:
     - vars/group_vars.yml
+  vars:
+    ansible_python_interpreter: /root/.pyenv/shims/python
   post_tasks:
     - name: Create Media Mount Point
       command: mkdir -p /Media

@@ -1,0 +1,27 @@
+---
+
+- name: Install Docker Pip Package
+  pip:
+    name: "{{ item }}"
+    state: present
+    extra_args: --ignore-installed PyYAML
+  loop:
+    - docker
+
+- name: Remove Container
+  docker_container:
+    name: flaresolverr
+    state: absent
+  when: "upgrade == 'True'"
+
+- name: Install flaresolverr Container
+  docker_container:
+    name: flaresolverr
+    image: ghcr.io/flaresolverr/flaresolverr:latest
+    pull: yes
+    state: started
+    restart_policy: unless-stopped
+    ports:
+      - "8191:8191/tcp"
+    env:
+      LOG_LEVEL: "info"
