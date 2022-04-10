@@ -8,13 +8,13 @@
 
 - name: Download Unpackerr
   get_url:
-    url: 'https://github.com/davidnewhall/unpackerr/releases/download/v{{ unpackerr_version }}/unpackerr-{{ unpackerr_version }}-246.x86_64.rpm'
+    url: 'https://github.com/davidnewhall/unpackerr/releases/download/v{{ unpackerr_version }}/unpackerr-{{ unpackerr_version }}-376.x86_64.rpm'
     dest: /tmp
     mode: 0766
 
 - name: Install Unpackerr
   yum:
-    name: '/tmp/unpackerr-{{ unpackerr_version }}-246.x86_64.rpm'
+    name: '/tmp/unpackerr-{{ unpackerr_version }}-376.x86_64.rpm'
     state: present
 
 - name: Install Unpackerr Config File

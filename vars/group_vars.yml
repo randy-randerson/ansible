@@ -1,7 +1,7 @@
 ---
 ansible_ssh_user: root
 radarr_version: 3.0.1.4259
-unpackerr_version: 0.7.2
+unpackerr_version: 0.9.9
 sonarr_api: 3984c291e8d146339e9badf22103ece5
 radarr_api: c99e9ff85f76498b85fb9d5ee2dcdc3e
 completed_downloads_path: /Media/CompletedDownloads
