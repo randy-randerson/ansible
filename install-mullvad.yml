@@ -1,0 +1,29 @@
+---
+- name: Media Manager
+  hosts: all
+  connection: local
+  gather_facts: no
+  vars_files:
+    - vars/group_vars.yml
+  vars:
+    ansible_python_interpreter: /root/.pyenv/shims/python
+  tasks:
+    - name: Add Mullvad User
+      ansible.builtin.user:
+        name: mullvad
+        shell: /sbin/nologin
+
+#    - name: Download Mullvad RPM
+#      ansible.builtin.get_url:
+#         dest: /tmp/MullvadVPN-x86_64.rpm
+#         group: mullvad
+#         user: mullvad
+#         mode: 0644
+#         url: https://mullvad.net/download/app/rpm/latest
+
+    - name: Install Mullvad
+      ansible.builtin.yum:
+        name: https://mullvad.net/download/app/rpm/latest
+        state: present
+      tags: install
+
