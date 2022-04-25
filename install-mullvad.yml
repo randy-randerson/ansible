@@ -20,6 +20,13 @@
         disable_gpg_check: yes
       tags: install
 
+    - name: Install glib-common
+      ansible.builtin.yum:
+        name: glibc231-common
+        state: present
+        enablerepo: gf-testing
+      tags: install
+
     - name: Install glib-libnsl
       ansible.builtin.yum:
         name: glibc231-libnsl
