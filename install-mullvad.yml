@@ -14,10 +14,10 @@
         shell: /sbin/nologin
 
     - name: Install glibc231-2.31-3.gf.el7.x86_64.rpm
-        ansible.builtin.yum:
-          name: http://mirror.ghettoforge.org/distributions/gf/el/7/testing/x86_64/glibc231-2.31-3.gf.el7.x86_64.rpm
-          state: present
-        tags: install
+      ansible.builtin.yum:
+        name: http://mirror.ghettoforge.org/distributions/gf/el/7/testing/x86_64/glibc231-2.31-3.gf.el7.x86_64.rpm
+        state: present
+      tags: install
 
     - name: Install glib-libnsl
       ansible.builtin.yum:
