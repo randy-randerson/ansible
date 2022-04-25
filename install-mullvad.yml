@@ -1,0 +1,42 @@
+---
+- name: Install Mullvad VPN
+  hosts: all
+  connection: local
+  gather_facts: no
+  vars_files:
+    - vars/group_vars.yml
+  vars:
+    ansible_python_interpreter: /root/.pyenv/shims/python
+  tasks:
+    - name: Add Mullvad User
+      ansible.builtin.user:
+        name: mullvad
+        shell: /sbin/nologin
+
+    - name: Install gf testing repo
+      ansible.builtin.yum:
+        name: https://mirror.ghettoforge.org/distributions/gf/gf-release-latest.gf.el7.noarch.rpm
+        state: present
+        disable_gpg_check: yes
+      tags: install
+
+    - name: Install glib-common
+      ansible.builtin.yum:
+        name: glibc231-common
+        state: present
+        enablerepo: gf-testing
+      tags: install
+
+    - name: Install glib-libnsl
+      ansible.builtin.yum:
+        name: glibc231-libnsl
+        state: present
+        enablerepo: gf-testing
+      tags: install
+
+    - name: Install Mullvad
+      ansible.builtin.yum:
+        name: https://mullvad.net/download/app/rpm/latest
+        state: present
+      tags: install
+
