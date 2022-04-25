@@ -1,5 +1,5 @@
 ---
-- name: Media Manager
+- name: Install Mullvad VPN
   hosts: all
   connection: local
   gather_facts: no
@@ -13,13 +13,11 @@
         name: mullvad
         shell: /sbin/nologin
 
-#    - name: Download Mullvad RPM
-#      ansible.builtin.get_url:
-#         dest: /tmp/MullvadVPN-x86_64.rpm
-#         group: mullvad
-#         user: mullvad
-#         mode: 0644
-#         url: https://mullvad.net/download/app/rpm/latest
+    - name: Install glib-libnsl
+      ansible.builtin.yum:
+        name: http://mirror.ghettoforge.org/distributions/gf/el/7/testing/x86_64/glibc231-libnsl-2.31-3.gf.el7.x86_64.rpm
+        state: present
+      tags: install
 
     - name: Install Mullvad
       ansible.builtin.yum:
