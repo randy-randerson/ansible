@@ -22,7 +22,7 @@
 
     - name: Install glib-libnsl
       ansible.builtin.yum:
-        name: http://mirror.ghettoforge.org/distributions/gf/el/7/testing/x86_64/glibc231-libnsl-2.31-3.gf.el7.x86_64.rpm
+        name: glibc231-libnsl
         state: present
         enablerepo: gf-testing
       tags: install
