@@ -13,10 +13,11 @@
         name: mullvad
         shell: /sbin/nologin
 
-    - name: Install glibc231-2.31-3.gf.el7.x86_64.rpm
+    - name: Install gf testing repo
       ansible.builtin.yum:
-        name: http://mirror.ghettoforge.org/distributions/gf/el/7/testing/x86_64/glibc231-2.31-3.gf.el7.x86_64.rpm
+        name: https://mirror.ghettoforge.org/distributions/gf/gf-release-latest.gf.el7.noarch.rpm
         state: present
+        disable_gpg_check: yes
       tags: install
 
     - name: Install glib-libnsl
