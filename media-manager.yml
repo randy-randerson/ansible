@@ -1,27 +1,27 @@
 ---
 - name: Media Manager
   hosts: all
-  connection: local
-  gather_facts: no
+  #connection: local
+  gather_facts: yes
   vars_files:
     - vars/group_vars.yml
   vars:
-    ansible_python_interpreter: /root/.pyenv/shims/python
+    #ansible_python_interpreter: /root/.pyenv/shims/python
   post_tasks:
     - name: Create Media Mount Point
-      command: mkdir -p /Media
+      ansible.builtin.command: mkdir -p /Media
 
     - name: Mount Media Share
-      mount:
+      ansible.posix.mount:
         path: /Media
         src: 192.168.1.33:/mnt/user/Media
         fstype: nfs
         opts: _netdev,defaults,auto,noatime,nofail,x-systemd.automount
         state: mounted
   roles:
-    - epel
-    - pip
-    - docker
-    - docker-compose
+#    - epel
+#    - pip
+#    - docker
+#    - docker-compose
     - media-manager
 
