@@ -1,8 +1,10 @@
 ---
+
 - name: Media Manager
-  hosts: all
-  #connection: local
-  gather_facts: yes
+  hosts: manager
+  gather_facts: no
+  remote_user: randy
+  become: yes
   vars_files:
     - vars/group_vars.yml
   vars:
@@ -19,9 +21,8 @@
         opts: _netdev,defaults,auto,noatime,nofail,x-systemd.automount
         state: mounted
   roles:
-#    - epel
-#    - pip
-#    - docker
-#    - docker-compose
+    #    - epel
+    #    - pip
+    #    - docker
+    #    - docker-compose
     - media-manager
-

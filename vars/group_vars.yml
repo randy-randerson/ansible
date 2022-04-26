@@ -1,5 +1,4 @@
 ---
-ansible_ssh_user: root
 radarr_version: 4.1.0.6175
 unpackerr_version: 0.9.9
 sonarr_api: 3984c291e8d146339e9badf22103ece5
