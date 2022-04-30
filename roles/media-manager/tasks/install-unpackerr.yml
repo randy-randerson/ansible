@@ -17,11 +17,6 @@
     deb: 'https://github.com/davidnewhall/unpackerr/releases/download/v{{ unpackerr_version }}/unpackerr_{{ unpackerr_version }}-376_amd64.deb'
     state: present
 
-#- name: Install Unpackerr
-#  yum:
-#    name: '/tmp/unpackerr-{{ unpackerr_version }}-376.x86_64.rpm'
-#    state: present
-
 - name: Install Unpackerr Config File
   ansible.builtin.template:
     src: unpackerr.conf.j2
