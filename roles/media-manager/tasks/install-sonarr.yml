@@ -9,7 +9,6 @@
   ansible.builtin.apt:
     deb: https://mediaarea.net/repo/deb/repo-mediaarea_1.0-19_all.deb
     state: present
-    update_cache: yes
 
 - name: Install packages
   ansible.builtin.apt:
