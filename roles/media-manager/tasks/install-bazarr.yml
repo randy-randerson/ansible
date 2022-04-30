@@ -15,7 +15,8 @@
   ansible.builtin.user:
     name: bazarr
     group: bazarr
-    shell: /home/bazarr
+    shell: /bin/false
+    home: /home/bazarr
 
 - name: Create Bazarr Dir
   ansible.builtin.file:
