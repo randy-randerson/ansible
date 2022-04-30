@@ -20,7 +20,7 @@
     state: present
   loop:
     - gnupg
-    - ca-certificate
+    - ca-certificates
 
 - name: Add an Apt signing key for Mono
   ansible.builtin.apt_key:
