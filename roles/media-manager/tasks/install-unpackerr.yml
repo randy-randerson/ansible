@@ -1,5 +1,10 @@
 ---
 
+- name: Ensure unpackerr group exists
+  ansible.builtin.group:
+    name: unpackerr
+    state: present
+
 - name: Add Unpackerr User
   ansible.builtin.user:
     name: unpackerr
