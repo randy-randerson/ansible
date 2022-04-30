@@ -9,10 +9,7 @@
   ansible.builtin.shell: wget https://mediaarea.net/repo/deb/repo-mediaarea_1.0-19_all.deb && dpkg -i repo-mediaarea_1.0-19_all.deb
   args:
     chdir: /tmp
-
-- name: Apt update
-  ansible.builtin.apt:
-    update_cache: yes
+  notify: Apt update
 
 - name: Install packages
   ansible.builtin.apt:
@@ -30,11 +27,7 @@
 
 - name: Add Mono repo
   ansible.builtin.shell: echo "deb https://download.mono-project.com/repo/ubuntu stable-focal main" | sudo tee /etc/apt/sources.list.d/mono-official-stable.list
-
-#- name: Add Mono repository into sources list
-#  ansible.builtin.apt_repository:
-#    repo: deb https://download.mono-project.com/repo/ubuntu
-#    state: present
+  notify: Apt update
 
 - name: Add an Apt signing key for Sonarr
   ansible.builtin.apt_key:
@@ -42,17 +35,9 @@
     keyserver: hkp://keyserver.ubuntu.com:80
     state: present
 
-#- name: Add Sonarr repository into sources list
-#  ansible.builtin.apt_repository:
-#    repo: deb https://apt.sonarr.tv/ubuntu
-#    state: present
-
 - name: Add Sonarr repo
   ansible.builtin.shell: echo "deb https://apt.sonarr.tv/ubuntu focal main" | sudo tee /etc/apt/sources.list.d/sonarr.list
-
-- name: Apt update
-  ansible.builtin.apt:
-    update_cache: yes
+  notify: Apt update
 
 - name: Add Sonarr User
   ansible.builtin.user:
