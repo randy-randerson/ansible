@@ -1,12 +1,12 @@
 [Unit]
 Description=Lidarr Daemon
-After=network.target
+After=syslog.target network.target
 
 [Service]
-User=lidarr
-Group=lidarr
+User={{ lidarr }}
+Group={{ media_group }}
 Type=simple
-ExecStart=/opt/Lidarr/Lidarr -nobrowser
+ExecStart=/opt/Lidarr/Lidarr -nobrowser -data=/var/lib/lidarr/
 TimeoutStopSec=20
 KillMode=process
 Restart=on-failure

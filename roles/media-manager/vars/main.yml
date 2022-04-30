@@ -7,3 +7,7 @@ bazarr_yum_packages:
 
 bazarr_url: https://github.com/morpheus65535/bazarr/releases/latest/download/bazarr.zip
 bazarr_dir: /opt/bazarr
+
+lidarr_user: lidarr
+media_group: media
+lidarr_version: 0.8.1.2135

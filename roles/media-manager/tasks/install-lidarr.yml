@@ -1,54 +1,75 @@
 ---
 
-- name: Add Yum Repo
-  yum_repository:
-    name: mono
-    description: Mono Centos Repo
-    baseurl: http://download.mono-project.com/repo/centos/
-
 - name: Install Packages
-  yum:
-    name: ['wget', 'nfs-utils', 'mediainfo', 'libzen', 'libmediainfo', 'curl', 'gettext', 'mono-core', 'mono-devel', 'sqlite.x86_64', 'git', 'par2cmdline', 'p7zip', 'unzip', 'tar', 'gcc', 'python-feedparser', 'python-cheetah', 'python-dbus', 'python-devel', 'libxslt-devel', 'yum-utils']
-    state: latest
+  ansible.builtin.apt:
+    name: ['curl', 'sqlite3', 'mediainfo', 'libchromaprint-tools']
+    state: present
 
 - name: Add Lidarr User
-  user:
-    name: lidarr
+  ansible.builtin.user:
+    name: "{{ lidarr_user }}"
     shell: /sbin/nologin
-    group: lidarr 
+    group: "{{ media_group }}"
 
 - name: Download Lidarr
-  unarchive:
-    src: https://github.com/lidarr/Lidarr/releases/download/v0.8.0.2042/Lidarr.develop.0.8.0.2042.linux-core-x64.tar.gz  
-    group: lidarr
-    owner: lidarr
-    dest: /opt
+  ansible.builtin.get_url:
+    url: http://lidarr.servarr.com/v1/update/master/updatefile?os=linux&runtime=netcore&arch=x64
+    dest: /tmp
+    mode: 0766
+    validate_certs: no
+
+- name: Unpack Lidarr
+  ansible.builtin.unarchive:
+    src: '/tmp/Lidarr.master.{{ lidarr_version }}.linux-core-x64.tar.gz'
+    group: "{{ media_group }}"
+    owner: "{{ lidarr_user }}"
+    dest: /tmp
     extra_opts:
     remote_src: yes
 
+- name: Move Lidarr Directory
+  ansible.builtin.copy:
+    src: /tmp/Lidarr/
+    dest: /opt/Lidarr
+    group: "{{ media_group }}"
+    owner: "{{ lidarr_user }}"
+    remote_src: yes
+
 - name: Change Lidarr Dir Ownership
-  file:
+  ansible.builtin.file:
     path: /opt/Lidarr
     state: directory
     recurse: yes
-    owner: lidarr
-    group: lidarr
+    owner: "{{ lidarr_user }}"
+    group: "{{ media_group }}"
+
+- name: Create var directory
+  ansible.builtin.file:
+    path: /var/lib/lidarr
+    state: directory
+    recurse: yes
+    owner: "{{ lidarr_user }}"
+    group: "{{ media_group }}"
 
 - name: Copy Service File
-  template:
+  ansible.builtin.template:
     src: lidarr.service.j2
     dest: /etc/systemd/system/lidarr.service
 
 - name: Add Lidarr Port
-  firewalld:
-    port: 8686/tcp
-    state: enabled
-    permanent: yes
+  community.general.ufw:
+    port: 8686
+    rule: allow
+    proto: tcp
 
 - name: Enable Lidarr Service
-  systemd:
+  ansible.builtin.systemd:
     name: lidarr
     daemon_reload: yes
     enabled: yes
     state: started
-  notify: Reload Firewalld
+
+- name: Remove Lidarr package
+  ansible.builtin.file:
+    path: '/tmp/Lidarr.master.{{ lidarr_version }}.linux-core-x64.tar.gz'
+    state: absent
