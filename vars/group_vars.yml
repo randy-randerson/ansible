@@ -3,5 +3,6 @@ radarr_version: 4.1.0.6175
 unpackerr_version: 0.9.9
 sonarr_api: 3984c291e8d146339e9badf22103ece5
 radarr_api: c99e9ff85f76498b85fb9d5ee2dcdc3e
+lidarr_api: 5d7cb5d6d31b48deaa76587171b7327b
 completed_downloads_path: /Media/CompletedDownloads
 unpackerr_log_path: /home/unpackerr/unpackerr.log
