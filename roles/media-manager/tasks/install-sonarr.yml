@@ -7,8 +7,8 @@
 
 - name: Install Mediainfo repo
   ansible.builtin.shell: wget https://mediaarea.net/repo/deb/repo-mediaarea_1.0-19_all.deb && dpkg -i repo-mediaarea_1.0-19_all.deb
-    args:
-      chdir: /tmp
+  args:
+    chdir: /tmp
 
 - name: Apt update
   ansible.builtin.apt:
