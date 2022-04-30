@@ -7,7 +7,7 @@
 
 - name: Install GPG key
   ansible.builtin.shell: curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
-  creates: /usr/share/keyrings/docker-archive-keyring.gpg
+    creates: /usr/share/keyrings/docker-archive-keyring.gpg
 
 - name: Setup Docker stable repo
   ansible.builtin.shell: |
