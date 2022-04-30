@@ -1,10 +1,10 @@
 - name: Install Docker Compose
-  yum:
+  ansible.builtin.apt:
     name: ['docker-compose', 'gcc', 'python-devel']
     state: present
 
 - name: Install Docker Pip Package
-  pip:
+  ansible.builtin.pip:
     name: "{{ item }}"
     state: present
     extra_args: --ignore-installed PyYAML
