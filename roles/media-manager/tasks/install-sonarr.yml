@@ -1,78 +1,117 @@
 ---
 
-- name: Import GPG Key
-  rpm_key:
+#- name: Import GPG Key
+#  rpm_key:
+#    state: present
+#    key: http://keyserver.ubuntu.com/pks/lookup?op=get&search=0x3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF
+
+- name: Install Mediainfo repo
+  ansible.builtin.apt:
+    deb: https://mediaarea.net/repo/deb/repo-mediaarea_1.0-19_all.deb
     state: present
-    key: http://keyserver.ubuntu.com/pks/lookup?op=get&search=0x3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF
+    update_cache: yes
 
-- name: Add Yum Repo
-  yum_repository:
-    name: mono
-    description: Mono Centos Repo
-    baseurl: http://download.mono-project.com/repo/centos/
+- name: Install packages
+  ansible.builtin.apt:
+    deb: ['gnupg', 'ca-certificate']
+    state: present
+    update_cache: yes
 
-- name: Install Packages
-  yum:
-    name: ['wget', 'nfs-utils', 'mediainfo', 'libzen', 'libmediainfo', 'curl', 'gettext', 'mono-core', 'mono-devel', 'sqlite.x86_64', 'git', 'par2cmdline', 'p7zip', 'unzip', 'tar', 'gcc', 'python-feedparser', 'python-cheetah', 'python-dbus', 'python-devel', 'libxslt-devel', 'yum-utils']
-    state: latest
+- name: Add an Apt signing key for Mono
+  ansible.builtin.apt_key:
+    id: 3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF
+    keyserver: hkp://keyserver.ubuntu.com:80
+    state: present
+
+- name: Add Mono repository into sources list
+  ansible.builtin.apt_repository:
+    repo: deb https://download.mono-project.com/repo/ubuntu
+    state: present
+
+- name: Add an Apt signing key for Sonarr
+  ansible.builtin.apt_key:
+    id: 2009837CBFFD68F45BC180471F4F90DE2A9B4BF8
+    keyserver: hkp://keyserver.ubuntu.com:80
+    state: present
+
+- name: Add Sonarr repository into sources list
+  ansible.builtin.apt_repository:
+    repo: deb https://apt.sonarr.tv/ubuntu
+    state: present
 
 - name: Add Sonarr User
-  user:
+  ansible.builtin.user:
     name: sonarr
     shell: /sbin/nologin
 
-- name: Create Sonarr Dir
-  file:
-    path: /opt/sonarr
-    state: directory
-    owner: sonarr
-    group: sonarr
-
-- name: Create Sonarr Bin Dir
-  file:
-    path: /opt/sonarr/bin
-    state: directory
-    owner: sonarr
-    group: sonarr
-
-- name: Download Unrar
-  unarchive:
-    src: https://www.rarlab.com/rar/rarlinux-x64-5.5.0.tar.gz
-    dest: /usr/local/bin
-    remote_src: yes
-
-- name: Download Sonarr
-  unarchive:
-    src: https://services.sonarr.tv/v1/download/main/latest?version=3&os=linux
-    group: sonarr
-    owner: sonarr
-    dest: /tmp
-    extra_opts:
-    remote_src: yes
-
-- name: Move Sonarr Directory
-  copy:
-    src: /tmp/Sonarr/
-    dest: /opt/sonarr/bin
-    group: sonarr
-    owner: sonarr
-    remote_src: yes
-
-- name: Copy Service File
-  template:
-    src: sonarr.service.j2
-    dest: /etc/systemd/system/sonarr.service
-
-- name: Add Sonarr Port
-  firewalld:
-    port: 8989/tcp
-    state: enabled
-    permanent: yes
-
-- name: Enable Sonarr Service
-  systemd:
+- name: Install Sonarr
+  ansible.builtin.apt:
     name: sonarr
-    daemon_reload: yes
-    enabled: yes
-    state: started
-  notify: Reload Firewalld
+    state: present
+
+#- name: Add Yum Repo
+#  yum_repository:
+#    name: mono
+#    description: Mono Centos Repo
+#    baseurl: http://download.mono-project.com/repo/centos/
+#
+#- name: Install Packages
+#  yum:
+#    name: ['wget', 'nfs-utils', 'mediainfo', 'libzen', 'libmediainfo', 'curl', 'gettext', 'mono-core', 'mono-devel', 'sqlite.x86_64', 'git', 'par2cmdline', 'p7zip', 'unzip', 'tar', 'gcc', 'python-feedparser', 'python-cheetah', 'python-dbus', 'python-devel', 'libxslt-devel', 'yum-utils']
+#    state: latest
+
+#- name: Create Sonarr Dir
+#  file:
+#    path: /opt/sonarr
+#    state: directory
+#    owner: sonarr
+#    group: sonarr
+#
+#- name: Create Sonarr Bin Dir
+#  file:
+#    path: /opt/sonarr/bin
+#    state: directory
+#    owner: sonarr
+#    group: sonarr
+#
+#- name: Download Unrar
+#  unarchive:
+#    src: https://www.rarlab.com/rar/rarlinux-x64-5.5.0.tar.gz
+#    dest: /usr/local/bin
+#    remote_src: yes
+#
+#- name: Download Sonarr
+#  unarchive:
+#    src: https://services.sonarr.tv/v1/download/main/latest?version=3&os=linux
+#    group: sonarr
+#    owner: sonarr
+#    dest: /tmp
+#    extra_opts:
+#    remote_src: yes
+#
+#- name: Move Sonarr Directory
+#  copy:
+#    src: /tmp/Sonarr/
+#    dest: /opt/sonarr/bin
+#    group: sonarr
+#    owner: sonarr
+#    remote_src: yes
+#
+#- name: Copy Service File
+#  template:
+#    src: sonarr.service.j2
+#    dest: /etc/systemd/system/sonarr.service
+#
+#- name: Add Sonarr Port
+#  firewalld:
+#    port: 8989/tcp
+#    state: enabled
+#    permanent: yes
+#
+#- name: Enable Sonarr Service
+#  systemd:
+#    name: sonarr
+#    daemon_reload: yes
+#    enabled: yes
+#    state: started
+#  notify: Reload Firewalld
