@@ -29,7 +29,7 @@
     state: present
 
 - name: Add Mono repo
-  ansible.builtin.command: echo "deb https://download.mono-project.com/repo/ubuntu stable-focal main" | sudo tee /etc/apt/sources.list.d/mono-official-stable.list
+  ansible.builtin.shell: echo "deb https://download.mono-project.com/repo/ubuntu stable-focal main" | sudo tee /etc/apt/sources.list.d/mono-official-stable.list
 
 #- name: Add Mono repository into sources list
 #  ansible.builtin.apt_repository:
@@ -48,7 +48,7 @@
 #    state: present
 
 - name: Add Sonarr repo
-  ansible.builtin.command: echo "deb https://apt.sonarr.tv/ubuntu focal main" | sudo tee /etc/apt/sources.list.d/sonarr.list
+  ansible.builtin.shell: echo "deb https://apt.sonarr.tv/ubuntu focal main" | sudo tee /etc/apt/sources.list.d/sonarr.list
 
 - name: Apt update
   ansible.builtin.apt:
