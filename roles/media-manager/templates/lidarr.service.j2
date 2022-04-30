@@ -3,7 +3,7 @@ Description=Lidarr Daemon
 After=syslog.target network.target
 
 [Service]
-User={{ lidarr }}
+User={{ lidarr_user }}
 Group={{ media_group }}
 Type=simple
 ExecStart=/opt/Lidarr/Lidarr -nobrowser -data=/var/lib/lidarr/
