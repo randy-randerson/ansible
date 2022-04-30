@@ -28,10 +28,13 @@
     keyserver: hkp://keyserver.ubuntu.com:80
     state: present
 
-- name: Add Mono repository into sources list
-  ansible.builtin.apt_repository:
-    repo: deb https://download.mono-project.com/repo/ubuntu
-    state: present
+- name: Add Mono repo
+  ansible.builtin.command: echo "deb https://download.mono-project.com/repo/ubuntu stable-focal main" | sudo tee /etc/apt/sources.list.d/mono-official-stable.list
+
+#- name: Add Mono repository into sources list
+#  ansible.builtin.apt_repository:
+#    repo: deb https://download.mono-project.com/repo/ubuntu
+#    state: present
 
 - name: Add an Apt signing key for Sonarr
   ansible.builtin.apt_key:
@@ -39,10 +42,17 @@
     keyserver: hkp://keyserver.ubuntu.com:80
     state: present
 
-- name: Add Sonarr repository into sources list
-  ansible.builtin.apt_repository:
-    repo: deb https://apt.sonarr.tv/ubuntu
-    state: present
+#- name: Add Sonarr repository into sources list
+#  ansible.builtin.apt_repository:
+#    repo: deb https://apt.sonarr.tv/ubuntu
+#    state: present
+
+- name: Add Sonarr repo
+  ansible.builtin.command: echo "deb https://apt.sonarr.tv/ubuntu focal main" | sudo tee /etc/apt/sources.list.d/sonarr.list
+
+- name: Apt update
+  ansible.builtin.apt:
+    update_cache: yes
 
 - name: Add Sonarr User
   ansible.builtin.user:
