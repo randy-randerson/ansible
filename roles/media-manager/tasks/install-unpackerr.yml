@@ -1,28 +1,28 @@
 ---
 
 - name: Add Unpackerr User
-  user:
+  ansible.builtin.user:
     name: unpackerr
+    group: unpackerr
     shell: /bin/false
     home: /home/unpackerr
 
-- name: Download Unpackerr
-  get_url:
-    url: 'https://github.com/davidnewhall/unpackerr/releases/download/v{{ unpackerr_version }}/unpackerr-{{ unpackerr_version }}-376.x86_64.rpm'
-    dest: /tmp
-    mode: 0766
-
 - name: Install Unpackerr
-  yum:
-    name: '/tmp/unpackerr-{{ unpackerr_version }}-376.x86_64.rpm'
+  ansible.builtin.apt:
+    deb: 'https://github.com/davidnewhall/unpackerr/releases/download/v{{ unpackerr_version }}/unpackerr_{{ unpackerr_version }}-376_amd64.deb'
     state: present
 
+#- name: Install Unpackerr
+#  yum:
+#    name: '/tmp/unpackerr-{{ unpackerr_version }}-376.x86_64.rpm'
+#    state: present
+
 - name: Install Unpackerr Config File
-  template:
+  ansible.builtin.template:
     src: unpackerr.conf.j2
     dest: /etc/unpackerr/unpackerr.conf
 
 - name: Restart Unpackerr
-  systemd:
+  ansible.builtin.systemd:
     state: restarted
     name: unpackerr

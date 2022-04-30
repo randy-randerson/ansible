@@ -91,9 +91,9 @@ dir_mode = "0777"
  #Music
 [[lidarr]]
   url = "http://127.0.0.1:8686"
-  api_key = "5d7cb5d6d31b48deaa76587171b7327b"
+  api_key = "{{ lidarr_api }}"
  # File system path where downloaded Lidarr items are located.
-  paths = ["/Media/CompletedDownloads"]
+  paths = ["{{ completed_downloads_path }}"]
 #Default protocols is torrent. Alternative: "torrent,usenet"
    protocols = "torrent"
 
