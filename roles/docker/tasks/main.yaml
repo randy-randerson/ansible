@@ -20,6 +20,6 @@
 
 - name: Install Docker Engine
   ansible.builtin.apt:
-    name: ['docker-ce', 'docker-ce-cli', 'container.io', 'docker-compose-plugin']
+    name: ['docker-ce', 'docker-ce-cli', 'containerd.io', 'docker-compose-plugin']
     state: present
     update_cache: yes
