@@ -1,11 +1,13 @@
 ---
 
 - name: Install docker compose
-  ansible.builtin.shell: sudo curl -L "https://github.com/docker/compose/releases/download/2.5.0/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+  ansible.builtin.shell: |
+    sudo mkdir -p /usr/local/lib/docker/cli-plugins
+    sudo curl -SL https://github.com/docker/compose/releases/download/v2.4.1/docker-compose-linux-x86_64 -o /usr/local/lib/docker/cli-plugins/docker-compose
   args:
-    creates: /usr/local/bin/docker-compose
+    creates: /usr/local/lib/docker/cli-plugins/docker-compose
 
 - name: Set docker compose bin executable
   ansible.builtin.file:
-    path: /usr/local/bin/docker-compose
+    path: /usr/local/lib/docker/cli-plugins/docker-compose
     mode: +x
