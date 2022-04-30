@@ -16,8 +16,11 @@
 
 - name: Install packages
   ansible.builtin.apt:
-    name: ['gnupg', 'ca-certificate']
+    name: "{{ item }}"
     state: present
+  loop:
+    - gnupg
+    - ca-certificate
 
 - name: Add an Apt signing key for Mono
   ansible.builtin.apt_key:
