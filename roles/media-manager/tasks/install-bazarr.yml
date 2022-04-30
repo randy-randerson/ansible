@@ -10,7 +10,7 @@
   ansible.builtin.user:
     name: bazarr
     group: "{{ media_group }}"
-    shell: /sbin/nologin
+    shell: /home/bazarr
 
 - name: Create Bazarr Dir
   ansible.builtin.file:
