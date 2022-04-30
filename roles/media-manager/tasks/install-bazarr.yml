@@ -28,8 +28,8 @@
 - name: Unpack Bazarr
   ansible.builtin.unarchive:
     src: "/tmp/bazarr.zip"
-    group: bazarr
-    owner: "{{ media_group }}"
+    group: "{{ media_group }}"
+    owner: bazarr
     dest: "{{ bazarr_dir }}"
     extra_opts:
     remote_src: yes
