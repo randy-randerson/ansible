@@ -5,7 +5,7 @@ After=syslog.target network.target sonarr.service Radarr.service
 [Service]
 WorkingDirectory=/opt/bazarr/
 User=bazarr
-Group={{ media_group }}
+Group=bazarr
 UMask=0002
 Restart=on-failure
 RestartSec=5
