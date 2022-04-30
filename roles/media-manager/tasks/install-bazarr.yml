@@ -6,6 +6,11 @@
     state: present
   loop: "{{ bazarr_yum_packages }}"
 
+- name: Ensure bazarr group exists
+  ansible.builtin.group:
+    name: bazarr
+    state: present
+
 - name: Add Bazarr User
   ansible.builtin.user:
     name: bazarr
