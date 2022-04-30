@@ -9,7 +9,7 @@
 - name: Add Bazarr User
   ansible.builtin.user:
     name: bazarr
-    group: "{{ media_group }}"
+    group: bazarr
     shell: /home/bazarr
 
 - name: Create Bazarr Dir
