@@ -6,9 +6,9 @@
 #    key: http://keyserver.ubuntu.com/pks/lookup?op=get&search=0x3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF
 
 - name: Install Mediainfo repo
-  ansible.builtin.apt:
-    deb: https://mediaarea.net/repo/deb/repo-mediaarea_1.0-19_all.deb
-    state: present
+  ansible.builtin.shell: wget https://mediaarea.net/repo/deb/repo-mediaarea_1.0-19_all.deb && dpkg -i repo-mediaarea_1.0-19_all.deb
+    args:
+      chdir: /tmp
 
 - name: Apt update
   ansible.builtin.apt:
