@@ -12,6 +12,7 @@
   post_tasks:
     - name: Create Media Mount Point
       ansible.builtin.command: mkdir -p /Media
+      tags: mount
 
     - name: Mount Media Share
       ansible.posix.mount:
@@ -20,6 +21,7 @@
         fstype: nfs
         opts: _netdev,defaults,auto,noatime,nofail,x-systemd.automount
         state: mounted
+      tags: mount
   roles:
     #    - epel
     #    - pip
