@@ -1,13 +1,11 @@
-- name: Install Docker Compose
-  ansible.builtin.apt:
-    name: ['docker-compose', 'gcc', 'python-devel']
-    state: present
+---
 
-- name: Install Docker Pip Package
-  ansible.builtin.pip:
-    name: "{{ item }}"
-    state: present
-    extra_args: --ignore-installed PyYAML
-  loop:
-    - docker
-    - docker-compose
+- name: Install docker compose
+  ansible.builtin.shell: sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+  args:
+    creates: /usr/local/bin/docker-compose
+
+- name: Set docker compose bin executable
+  ansible.builtin.file:
+    path: /usr/local/bin/docker-compose
+    mode: +x
