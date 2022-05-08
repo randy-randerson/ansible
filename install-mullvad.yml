@@ -1,8 +1,9 @@
 ---
 - name: Install Mullvad VPN
-  hosts: all
-  connection: local
+  hosts: manager
   gather_facts: no
+  remote_user: randy
+  become: yes
   vars_files:
     - vars/group_vars.yml
   vars:
@@ -14,3 +15,20 @@
         state: present
       tags: install
 
+    - name: Set Mullvad Account
+      ansible.builtin.command: mullvad account set {{ mullvad_acct }}
+
+    - name: Set Mullvad relay
+      ansible.builtin.command: mullvad relay set location us qas
+
+    - name: Allow Mullvad LAN access
+      ansible.builtin.command: mullvad lan set allow
+
+    - name: Set auto connect
+      ansible.builtin.command: mullvad auto-connect set on
+
+    - name: Connect
+      ansible.builtin.command: mullvad connect
+
+    - name: Set killswitch on
+      ansible.builtin.command: mullvad always-require-vpn set on
