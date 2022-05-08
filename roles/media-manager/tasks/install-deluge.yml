@@ -17,7 +17,7 @@
     name: deluge
     group: "{{ media_group }}"
     shell: /bin/false
-    home: /home/bazarr
+    home: /home/deluge
 
 - name: Create log file directory
   ansible.builtin.file:
