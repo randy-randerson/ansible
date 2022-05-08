@@ -6,7 +6,10 @@ Before=deluge-web.service
 
 [Service]
 User=deluge
-ExecStart=/usr/bin/deluged -d --logfile=/var/lib/deluge/.config/deluge/deluged.log --loglevel=info 
+Group={{ media_group }}
+ExecStart=/usr/bin/deluged -d --logfile=/var/lib/deluge/.config/deluge/deluged.log --loglevel=info
+
+Restart=on-failure
 
 [Install]
 WantedBy=multi-user.target
