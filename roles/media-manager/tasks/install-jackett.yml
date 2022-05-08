@@ -1,53 +1,52 @@
 ---
 
 - name: Add Jackett User
-  user:
+  ansible.builtin.user:
     name: jackett
     shell: /sbin/nologin
 
 - name: Create Jackett Dir
-  file:
+  ansible.builtin.file:
     path: /opt/Jackett
     state: directory
     owner: jackett
     group: jackett
 
-- name: Install Pre-reqs
-  yum:
-    name: libicu
-    state: present
+#- name: Install Pre-reqs
+#  yum:
+#    name: libicu
+#    state: present
 
 - name: Download Jackett
-  unarchive:
-    src: https://github.com/Jackett/Jackett/releases/download/v0.16.1045/Jackett.Binaries.LinuxAMDx64.tar.gz
+  ansible.builtin.unarchive:
+    src: https://github.com/Jackett/Jackett/releases/download/v0.20.1027/Jackett.Binaries.LinuxAMDx64.tar.gz
     dest: /opt/Jackett
     remote_src: yes
 
 - name: Install Jackett
-  command: ./install_service_systemd.sh
+  ansible.builtin.command: ./install_service_systemd.sh
   args:
     chdir: /opt/Jackett/Jackett
 
 - name: Copy Jackett Service File
-  template:
+  ansible.builtin.template:
     src: jackett.service.j2
     dest: /etc/systemd/system/jackett.service
 
 - name: Enable Jacket Service
-  systemd:
+  ansible.builtin.systemd:
     name: jackett
     daemon_reload: yes
     enabled: yes
     state: started
 
 - name: Add Jackett Port
-  firewalld:
-    port: 9117/tcp
-    permanent: yes
-    state: enabled
-  notify: Reload Firewalld
+  community.general.ufw:
+    port: 9117
+    rule: allow
+    proto: tcp
 
 - name: Cleanup Install Files
-  file:
+  ansible.builtin.file:
     path: /opt/Jacket/Jackett.Binaries.LinuxAMDx64.tar.gz
     state: absent

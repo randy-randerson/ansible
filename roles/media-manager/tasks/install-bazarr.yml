@@ -1,58 +1,77 @@
 ---
 
 - name: Install Packages
-  yum:
+  ansible.builtin.apt:
     name: "{{ item }}"
-    state: latest
+    state: present
   loop: "{{ bazarr_yum_packages }}"
 
-- name: Add Bazarr User
-  user:
+- name: Ensure bazarr group exists
+  ansible.builtin.group:
     name: bazarr
-    shell: /sbin/nologin
+    state: present
+
+- name: Add Bazarr User
+  ansible.builtin.user:
+    name: bazarr
+    group: bazarr
+    shell: /bin/false
+    home: /home/bazarr
 
 - name: Create Bazarr Dir
-  file:
+  ansible.builtin.file:
     path: "{{ bazarr_dir }}"
     state: directory
     owner: bazarr
-    group: bazarr
+    group: "{{ media_group }}"
 
 - name: Download bazarr
-  get_url:
+  ansible.builtin.get_url:
     url: "{{ bazarr_url }}"
     dest: /tmp
     mode: 0766
 
 - name: Unpack Bazarr
-  unarchive:
+  ansible.builtin.unarchive:
     src: "/tmp/bazarr.zip"
-    group: bazarr
+    group: "{{ media_group }}"
     owner: bazarr
     dest: "{{ bazarr_dir }}"
     extra_opts:
     remote_src: yes
 
+- name: Install python requirements
+  ansible.builtin.shell: python3 -m pip install -r requirements.txt
+  args:
+    chdir: "{{ bazarr_dir }}"
+
 - name: Copy Bazarr Service File
-  template:
+  ansible.builtin.template:
     src: bazarr.service.j2
     dest: /etc/systemd/system/bazarr.service
 
+- name: Change Bazarr Dir Ownership
+  ansible.builtin.file:
+    path: /opt/bazarr
+    state: directory
+    recurse: yes
+    owner: bazarr
+    group: "{{ media_group }}"
+
 - name: Add Bazarr Port
-  firewalld:
-    port: 6767/tcp
-    state: enabled
-    permanent: yes
+  community.general.ufw:
+    port: 6767
+    rule: allow
+    proto: tcp
 
 - name: Enable Bazarr Service
-  systemd:
+  ansible.builtin.systemd:
     name: bazarr
     daemon_reload: yes
     enabled: yes
     state: started
-  notify: Reload Firewalld
 
 - name: Cleanup Install Files
-  file:
+  ansible.builtin.file:
     path: "/tmp/bazarr.zip"
     state: absent

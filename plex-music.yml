@@ -2,11 +2,12 @@
 
 # ansible-playbook -i localhost, plex-music.yml -e upgrade=True
 
-- name: Install Plex Docker 
-  hosts: all
-  connection: local
+- name: Install Plex Docker
+  hosts: manager
   gather_facts: no
-  vars:
-    ansible_python_interpreter: /root/.pyenv/shims/python
+  remote_user: randy
+  become: yes
+  vars_files:
+    - vars/group_vars.yml
   roles:
     - plex-music

@@ -1,13 +1,13 @@
-- name: Install Docker Compose
-  yum:
-    name: ['docker-compose', 'gcc', 'python-devel']
-    state: present
+---
 
-- name: Install Docker Pip Package
-  pip:
-    name: "{{ item }}"
-    state: present
-    extra_args: --ignore-installed PyYAML
-  loop:
-    - docker
-    - docker-compose
+- name: Install docker compose
+  ansible.builtin.shell: |
+    sudo mkdir -p /usr/local/lib/docker/cli-plugins
+    sudo curl -SL https://github.com/docker/compose/releases/download/v2.4.1/docker-compose-linux-x86_64 -o /usr/local/lib/docker/cli-plugins/docker-compose
+  args:
+    creates: /usr/local/lib/docker/cli-plugins/docker-compose
+
+- name: Set docker compose bin executable
+  ansible.builtin.file:
+    path: /usr/local/lib/docker/cli-plugins/docker-compose
+    mode: +x

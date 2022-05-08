@@ -1,9 +1,10 @@
 ---
 
 - name: Create Plex User
-  user:
+  ansible.builtin.user:
     name: plex
-    shell: /sbin/nologin
+    shell: /bin/false
+    home: /home/plex
 
 - name: Install Docker Pip Package
   pip:
@@ -38,10 +39,10 @@
 #      - "32413:32413/udp"
 #      - "32414:32414/udp"
     env:
-      PUID: "1005"
-      PGID: "1005"
+      PUID: "1008"
+      PGID: "1008"
       VERSION: "docker"
-#      PLEX_CLAIM:
+      #PLEX_CLAIM: "{{ plex_token }}"
     volumes:
       - /home/plex:/config
       - /Media/Music:/music
