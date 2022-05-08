@@ -23,7 +23,7 @@
   ansible.builtin.apt:
     name: "{{ item }}"
     state: present
-  loop: "{{ bazarr_yum_packages }}"
+  loop: "{{ deluge_apt_packages }}"
 
 - name: Install Deluge Web Service file
   template:
