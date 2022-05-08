@@ -1,21 +1,29 @@
 ---
 
-- name: Download Nux Repo
-  get_url:
-    url: http://li.nux.ro/download/nux/dextop/el7/x86_64/nux-dextop-release-0-5.el7.nux.noarch.rpm
-    dest: /tmp
-    mode: 0777
+#- name: Download Nux Repo
+#  get_url:
+#    url: http://li.nux.ro/download/nux/dextop/el7/x86_64/nux-dextop-release-0-5.el7.nux.noarch.rpm
+#    dest: /tmp
+#    mode: 0777
+#
+#- name: Install Nux
+#  shell: rpm -ivh nux-dextop-release-0-5.el7.nux.noarch.rpm
+#  args:
+#    chdir: /tmp
+#  ignore_errors: true
 
-- name: Install Nux
-  shell: rpm -ivh nux-dextop-release-0-5.el7.nux.noarch.rpm
-  args:
-    chdir: /tmp
-  ignore_errors: true
+- name: Add Deluge User
+  ansible.builtin.user:
+    name: deluge
+    group: "{{ media_group }}"
+    shell: /bin/false
+    home: /home/bazarr
 
-- name: Install Deluge Web
-  yum:
-    name: deluge-web
-    state: latest
+- name: Install Packages
+  ansible.builtin.apt:
+    name: "{{ item }}"
+    state: present
+  loop: "{{ bazarr_yum_packages }}"
 
 - name: Install Deluge Web Service file
   template:
@@ -24,8 +32,8 @@
 
 - name: Install Deluge Daemon Service file
   template:
-    src: deluge-daemon.service.j2
-    dest: /etc/systemd/system/deluge-daemon.service
+    src: deluged.service.j2
+    dest: /etc/systemd/system/deluged.service
 
 - name: Enable Deluge Web
   systemd:
@@ -39,12 +47,10 @@
     enabled: yes
     daemon_reload: yes
     state: started
-    name: deluge-daemon
+    name: deluged
 
-- name: Add Deluge Firewall Rule
-  firewalld:
-    port: 8112/tcp
-    permanent: yes
-    zone: public
-    state: enabled
-  notify: Reload Firewalld
+- name: Add Deluge Port
+  community.general.ufw:
+    port: 8112
+    rule: allow
+    proto: tcp

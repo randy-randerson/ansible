@@ -5,6 +5,11 @@ bazarr_yum_packages:
   - python3-pip
   - python3-distutils
 
+deluge_apt_packages:
+  - deluged
+  - deluge-web
+  - deluge-console
+
 bazarr_url: https://github.com/morpheus65535/bazarr/releases/latest/download/bazarr.zip
 bazarr_dir: /opt/bazarr
 
