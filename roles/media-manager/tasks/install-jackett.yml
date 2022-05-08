@@ -42,7 +42,7 @@
 
 - name: Add Jackett Port
   community.general.ufw:
-    port: 9177
+    port: 9117
     rule: allow
     proto: tcp
 
