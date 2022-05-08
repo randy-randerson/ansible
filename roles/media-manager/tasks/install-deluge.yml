@@ -19,6 +19,14 @@
     shell: /bin/false
     home: /home/bazarr
 
+- name: Create log file directory
+  ansible.builtin.file:
+    path: /var/log/deluge
+    owner: deluge
+    group: "{{ media_group }}"
+    state: directory
+    mode: 0750
+
 - name: Install Packages
   ansible.builtin.apt:
     name: "{{ item }}"

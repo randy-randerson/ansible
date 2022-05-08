@@ -7,7 +7,7 @@ Before=deluge-web.service
 [Service]
 User=deluge
 Group={{ media_group }}
-ExecStart=/usr/bin/deluged -d --logfile=/var/lib/deluge/.config/deluge/deluged.log --loglevel=info
+ExecStart=/usr/bin/deluged -d -l /var/log/deluge/daemon.log -L warning
 
 Restart=on-failure
 
