@@ -6,43 +6,43 @@
     shell: /bin/false
     home: /home/plex
 
-#- name: Install Docker Pip Package
-#  pip:
-#    name: "{{ item }}"
-#    state: present
-#    extra_args: --ignore-installed PyYAML
-#  loop:
-#    - docker
-#
-#- name: Remove Container
-#  docker_container:
-#    name: PlexMediaServer
-#    state: absent
-#  when: "upgrade == 'True'"
-#
-#- name: Install Plex Container
-#  docker_container:
-#    name: PlexMediaServer
-#    image: linuxserver/plex
-#    pull: yes
-#    state: started
-#    restart_policy: unless-stopped
-#    network_mode: host
-##    ports:
-##      - "32400:32400/tcp"
-##      - "3005:3005/tcp"
-##      - "8324:8324/tcp"
-##      - "32469:32469/tcp"
-##      - "1900:1900/udp"
-##      - "32410:32410/udp"
-##      - "32412:32412/udp"
-##      - "32413:32413/udp"
-##      - "32414:32414/udp"
-#    env:
-#      PUID: "1005"
-#      PGID: "1005"
-#      VERSION: "docker"
-#      PLEX_CLAIM: "{{ plex_token }}"
-#    volumes:
-#      - /home/plex:/config
-#      - /Media/Music:/music
+- name: Install Docker Pip Package
+  pip:
+    name: "{{ item }}"
+    state: present
+    extra_args: --ignore-installed PyYAML
+  loop:
+    - docker
+
+- name: Remove Container
+  docker_container:
+    name: PlexMediaServer
+    state: absent
+  when: "upgrade == 'True'"
+
+- name: Install Plex Container
+  docker_container:
+    name: PlexMediaServer
+    image: linuxserver/plex
+    pull: yes
+    state: started
+    restart_policy: unless-stopped
+    network_mode: host
+#    ports:
+#      - "32400:32400/tcp"
+#      - "3005:3005/tcp"
+#      - "8324:8324/tcp"
+#      - "32469:32469/tcp"
+#      - "1900:1900/udp"
+#      - "32410:32410/udp"
+#      - "32412:32412/udp"
+#      - "32413:32413/udp"
+#      - "32414:32414/udp"
+    env:
+      PUID: "1008"
+      PGID: "1008"
+      VERSION: "docker"
+      #PLEX_CLAIM: "{{ plex_token }}"
+    volumes:
+      - /home/plex:/config
+      - /Media/Music:/music
