@@ -1,17 +1,5 @@
 ---
 
-#- name: Download Nux Repo
-#  get_url:
-#    url: http://li.nux.ro/download/nux/dextop/el7/x86_64/nux-dextop-release-0-5.el7.nux.noarch.rpm
-#    dest: /tmp
-#    mode: 0777
-#
-#- name: Install Nux
-#  shell: rpm -ivh nux-dextop-release-0-5.el7.nux.noarch.rpm
-#  args:
-#    chdir: /tmp
-#  ignore_errors: true
-
 - name: Add Deluge User
   ansible.builtin.user:
     name: deluge
