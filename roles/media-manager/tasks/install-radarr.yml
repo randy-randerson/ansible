@@ -19,7 +19,7 @@
 
 - name: Download radarr
   ansible.builtin.get_url:
-    url: http://radarr.servarr.com/v1/update/master/updatefile?os=linux&runtime=netcore&arch=x64
+    url: 'https://github.com/Radarr/Radarr/releases/download/v{{ radarr_version }}/Radarr.master.{{ radarr_version }}.linux-core-x64.tar.gz' #http://radarr.servarr.com/v1/update/master/updatefile?os=linux&runtime=netcore&arch=x64
     dest: /tmp
     mode: 0766
     validate_certs: no
