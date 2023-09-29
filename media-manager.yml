@@ -10,6 +10,12 @@
   vars:
     #ansible_python_interpreter: /root/.pyenv/shims/python
   post_tasks:
+    - name: Install NFS helper
+      ansible.builtin.apt:
+        name: nfs-common
+        state: present
+      tags: mount
+
     - name: Create Media Mount Point
       ansible.builtin.command: mkdir -p /Media
       tags: mount
