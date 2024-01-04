@@ -1,0 +1,50 @@
+---
+
+- name: Install and configure Tautulli
+  hosts: tautulli
+  remote_user: ubuntu
+  become: yes
+  vars_files:
+    - vars/group_vars.yml
+  tasks:
+    - name: Create Tautulli User
+      ansible.builtin.user:
+        name: tautulli
+        shell: /bin/false
+        home: /home/tautulli
+
+    - name: Install Docker Pip Package
+      pip:
+        name: "{{ item }}"
+        state: present
+        extra_args: --ignore-installed PyYAML
+      loop:
+        - docker
+
+    - name: Remove tautulli Container
+      docker_container:
+        name: tautulli
+        state: absent
+      when: "upgrade == 'True'"
+
+    - name: Install Tautulli Container
+      docker_container:
+        name: tautulli
+        image: linuxserver/tautulli
+        pull: yes
+        state: started
+        restart_policy: unless-stopped
+        network_mode: host
+        ports:
+          - "8181:8181/tcp"
+        env:
+          PUID: "1000"
+          PGID: "1000"
+          TZ: "America/New_York"
+        volumes:
+          - /home/tautulli:/config
+  roles:
+    - role: docker
+      tags: docker
+    - role: docker-compose
+      tags: docker
