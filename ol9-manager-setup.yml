@@ -56,6 +56,14 @@
         group: "{{ media_group }}"
         mode: 0755
 
+    - name: Start Deluge services
+      community.docker.docker_compose_v2:
+        project_src: "{{ deluge_home }}/config"
+      register: compose_output
+
+    - name: Show compose output
+      ansible.builtin.debug:
+        var: compose_output
   roles:
     - role: geerlingguy.git
     - role: geerlingguy.docker
