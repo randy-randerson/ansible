@@ -23,7 +23,7 @@
     creates: /bin/mullvad
 
 - name: Set Mullvad Account
-  ansible.builtin.command: mullvad account set {{ mullvad_acct }}
+  ansible.builtin.command: mullvad account login {{ mullvad_acct }}
 
 - name: Set Mullvad relay
   ansible.builtin.command: mullvad relay set location us qas
