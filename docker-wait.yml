@@ -1,9 +1,0 @@
----
-- name: Media Manager
-  hosts: manager
-#  vars:
-#    ansible_ssh_user: root
-  roles:
-    - docker-wait
-
-
