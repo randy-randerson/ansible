@@ -16,7 +16,7 @@
           ansible.builtin.dnf:
             name: nfs-utils
             state: present
-            
+
         - name: Create Media Mount Point
           ansible.builtin.command: mkdir -p /Media
 
@@ -27,6 +27,11 @@
             fstype: nfs
             opts: _netdev,defaults,auto,noatime,nofail,x-systemd.automount
             state: mounted
+
+    - name: Ensure group "media" exists
+      ansible.builtin.group:
+        name: "{{ media_group }}"
+        state: present
 
     - name: Add Deluge User
       ansible.builtin.user:
