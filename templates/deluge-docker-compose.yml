@@ -12,6 +12,8 @@ services:
     volumes:
       - {{ deluge_home }}/config:/config:rw
       - /Media/ol9Downloads:/downloads:rw
+      - /Media/CompletedDownloads:/completeddownloads:rw
+      - /Media/Torrents:/torrents:rw
     ports:
       - 8112:8112
       - 6881:6881
