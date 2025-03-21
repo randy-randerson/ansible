@@ -1,13 +1,12 @@
 ---
 
-- name: Add Mullvad repo
-  ansible.builtin.yum_repository:
-    name: mullvad
-    description: Mullvadd YUM repo
-    baseurl: https://repository.mullvad.net/rpm/stable/mullvad.repo
+# - name: Add Mullvad repo
+#   ansible.builtin.yum_repository:
+#     name: mullvad
+#     description: Mullvadd YUM repo
+#     baseurl: https://repository.mullvad.net/rpm/stable/mullvad.repo
 
 - name: Install Mullvad Package
   ansible.builtin.dnf:
-    name: mullvad-vpn
+    name: "https://github.com/mullvad/mullvadvpn-app/releases/download/2025.4/MullvadVPN-2025.4_x86_64.rpm"
     state: present
-    repo: mullvad
