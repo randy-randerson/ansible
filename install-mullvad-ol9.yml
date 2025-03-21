@@ -1,0 +1,7 @@
+---
+
+- name: Add Mullvad repo
+  ansible.builtin.yum_repository:
+    name: mullvad
+    description: Mullvadd YUM repo
+    baseurl: https://repository.mullvad.net/rpm/stable/mullvad.repo
