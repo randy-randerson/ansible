@@ -3,6 +3,9 @@
 - name: Setup rhel media manager
   hosts: ol9-mediamgr
   become: true
+  tasks:
+    - name: Install mullvad
+      ansible.builtin.include_tasks: install-mullvad-ol9.yml
   roles:
     - role: geerlingguy.git
     - role: geerlingguy.docker
