@@ -38,7 +38,7 @@
   ansible.builtin.command: mullvad connect
 
 - name: Set killswitch on
-  ansible.builtin.command: mullvad always-require-vpn set on
+  ansible.builtin.command: mullvad lockdown-mode set on
 
 - name: Remove Mullvad Download
   ansible.builtin.file:
