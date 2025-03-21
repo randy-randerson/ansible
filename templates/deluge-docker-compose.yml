@@ -10,8 +10,8 @@ services:
       - TZ=America/New_York
       - DELUGE_LOGLEVEL=error #optional
     volumes:
-      - "{{ deluge_home }}/config:/config"
-      - /Media/ol9Downloads:/downloads
+      - {{ deluge_home }}/config:/config:rw
+      - /Media/ol9Downloads:/downloads:rw
     ports:
       - 8112:8112
       - 6881:6881
