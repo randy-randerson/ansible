@@ -3,6 +3,8 @@
 - name: Setup rhel media manager
   hosts: ol9-mediamgr
   become: true
+  vars_files:
+    - vars/group_vars.yml
   tasks:
     - name: Install mullvad
       ansible.builtin.include_tasks: install-mullvad-ol9.yml

@@ -19,3 +19,28 @@
 
 - name: Install Mullvad Package
   ansible.builtin.command: dnf install -y /tmp/mullvad.rpm
+  args:
+    creates: /bin/mullvad
+
+- name: Set Mullvad Account
+  ansible.builtin.command: mullvad account set {{ mullvad_acct }}
+
+- name: Set Mullvad relay
+  ansible.builtin.command: mullvad relay set location us qas
+
+- name: Allow Mullvad LAN access
+  ansible.builtin.command: mullvad lan set allow
+
+- name: Set auto connect
+  ansible.builtin.command: mullvad auto-connect set on
+
+- name: Connect
+  ansible.builtin.command: mullvad connect
+
+- name: Set killswitch on
+  ansible.builtin.command: mullvad always-require-vpn set on
+
+- name: Remove Mullvad Download
+  ansible.builtin.file:
+    path: /tmp/mullvad.rpm
+    state: absent
