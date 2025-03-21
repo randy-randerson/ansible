@@ -40,19 +40,23 @@
         shell: /bin/false
         home: /home/deluge
 
-    - name: Create log file directory
+    - name: Create Deluge config dir
       ansible.builtin.file:
-        path: "/var/log/{{ deluge_user }}"
+        path: "{{ deluge_home }}/config"
         owner: "{{ deluge_user }}"
         group: "{{ media_group }}"
         state: directory
         mode: 0750
 
-    - name: Install Packages
-      ansible.builtin.dnf:
-        name: "{{ item }}"
+    - name: Template Deluge Docker Compose file
+      ansible.builtin.template:
+        src: templates/deluge-docker-compose.yml
+        dest:  "{{ deluge_home }}/config/docker-compose.yml"
+        owner: "{{ deluge_user }}"
+        group: "{{ media_group }}"
         state: present
-      loop: "{{ deluge_dnf_packages }}"
+        mode: 0755
+
   roles:
     - role: geerlingguy.git
     - role: geerlingguy.docker
