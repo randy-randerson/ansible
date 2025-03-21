@@ -1,0 +1,8 @@
+---
+
+- name: Setup rhel media manager
+  hosts: ol9-mediamgr
+  become: true
+  roles:
+    - role: geerlingguy.git
+    - role: geerlingguy.docker
