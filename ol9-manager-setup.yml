@@ -64,6 +64,12 @@
     - name: Show compose output
       ansible.builtin.debug:
         var: compose_output
+
+    - name: Restart Deluge services
+      community.docker.docker_compose_v2:
+        project_src: "{{ deluge_home }}/config"
+        state: restarted
+      tags: restart_deluge
   roles:
     - role: geerlingguy.git
     - role: geerlingguy.docker
