@@ -7,7 +7,7 @@
     - vars/group_vars.yml
   tasks:
     - name: Install mullvad
-      ansible.builtin.include_tasks: install-mullvad-ol9.yml
+      ansible.builtin.include_tasks: include-install-mullvad-ol9.yml
   roles:
     - role: geerlingguy.git
     - role: geerlingguy.docker
