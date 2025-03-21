@@ -54,7 +54,6 @@
         dest:  "{{ deluge_home }}/config/docker-compose.yml"
         owner: "{{ deluge_user }}"
         group: "{{ media_group }}"
-        state: present
         mode: 0755
 
   roles:
