@@ -8,12 +8,46 @@
   tasks:
     - name: Install mullvad
       ansible.builtin.include_tasks: include-install-mullvad-ol9.yml
+
+    - name: Setup NFS mount
+      tags: mount
+      block:
+        - name: Install NFS utils
+          ansible.builtin.dnf:
+            name: nfs-utils
+            state: present
+            
+        - name: Create Media Mount Point
+          ansible.builtin.command: mkdir -p /Media
+
+        - name: Mount Media Share
+          ansible.posix.mount:
+            path: /Media
+            src: 192.168.1.33:/mnt/user/Media
+            fstype: nfs
+            opts: _netdev,defaults,auto,noatime,nofail,x-systemd.automount
+            state: mounted
+
+    - name: Add Deluge User
+      ansible.builtin.user:
+        name: "{{ deluge_user }}"
+        group: "{{ media_group }}"
+        shell: /bin/false
+        home: /home/deluge
+
+    - name: Create log file directory
+      ansible.builtin.file:
+        path: "/var/log/{{ deluge_user }}"
+        owner: "{{ deluge_user }}"
+        group: "{{ media_group }}"
+        state: directory
+        mode: 0750
+
+    - name: Install Packages
+      ansible.builtin.dnf:
+        name: "{{ item }}"
+        state: present
+      loop: "{{ deluge_dnf_packages }}"
   roles:
     - role: geerlingguy.git
     - role: geerlingguy.docker
-    - role: totaldebug.deluge
-      vars:
-        enable_logging: true
-        deluge_log_dir: '/var/log/deluge/'
-        deluge_log_level: warning
-
