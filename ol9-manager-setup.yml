@@ -11,3 +11,9 @@
   roles:
     - role: geerlingguy.git
     - role: geerlingguy.docker
+    - role: totaldebug.deluge
+      vars:
+        enable_logging: true
+        deluge_log_dir: '/var/log/deluge/'
+        deluge_log_level: warning
+
