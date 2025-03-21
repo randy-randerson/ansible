@@ -6,7 +6,16 @@
 #     description: Mullvadd YUM repo
 #     baseurl: https://repository.mullvad.net/rpm/stable/mullvad.repo
 
-- name: Install Mullvad Package
+- name: Install wget Package
   ansible.builtin.dnf:
-    name: "https://github.com/mullvad/mullvadvpn-app/releases/download/2025.4/MullvadVPN-2025.4_x86_64.rpm"
+    name: wget # "https://github.com/mullvad/mullvadvpn-app/releases/download/2025.4/MullvadVPN-2025.4_x86_64.rpm"
     state: present
+
+- name: Download Mullvad rpm
+  ansible.builtin.get_url:
+    dest: /tmp/mullvad.rpm
+    url: https://github.com/mullvad/mullvadvpn-app/releases/download/2025.4/MullvadVPN-2025.4_x86_64.rpm
+    mode: 0755
+
+- name: Install Mullvad Package
+  ansible.builtin.command: dnf install -y /tmp/mullvad.rpm
