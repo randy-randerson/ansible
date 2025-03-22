@@ -48,6 +48,21 @@
         state: directory
         mode: 0750
 
+    - name: Add Transmission User
+      ansible.builtin.user:
+        name: "{{ transmission_user }}"
+        group: "{{ media_group }}"
+        shell: /bin/false
+        home: /home/transmission
+
+    - name: Create Transmission config dir
+      ansible.builtin.file:
+        path: "{{ transmission_home }}/config"
+        owner: "{{ transmission_user }}"
+        group: "{{ media_group }}"
+        state: directory
+        mode: 0750
+
     - name: Template Deluge Docker Compose file
       ansible.builtin.template:
         src: templates/deluge-docker-compose.yml
@@ -70,6 +85,29 @@
         project_src: "{{ deluge_home }}/config"
         state: restarted
       tags: restart_deluge
+
+    - name: Template Transmission Docker Compose file
+      ansible.builtin.template:
+        src: templates/transmission-docker-compose.yml
+        dest:  "{{ transmission_home }}/config/docker-compose.yml"
+        owner: "{{ transmission_user }}"
+        group: "{{ media_group }}"
+        mode: 0755
+
+    - name: Start Transmission services
+      community.docker.docker_compose_v2:
+        project_src: "{{ transmission_home }}/config"
+      register: compose_output
+
+    - name: Show compose output
+      ansible.builtin.debug:
+        var: compose_output
+
+    - name: Restart Transmission services
+      community.docker.docker_compose_v2:
+        project_src: "{{ transmission_home }}/config"
+        state: restarted
+      tags: restart_transmission
   roles:
     - role: geerlingguy.git
     - role: geerlingguy.docker
