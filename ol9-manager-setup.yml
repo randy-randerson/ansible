@@ -93,7 +93,7 @@
         owner: "{{ transmission_user }}"
         group: "{{ media_group }}"
         mode: 0755
-      notify: Restart Transmissions services
+      notify: Restart Transmission services
 
     - name: Start Transmission services
       community.docker.docker_compose_v2:
