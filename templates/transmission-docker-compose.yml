@@ -7,7 +7,6 @@ services:
       - PUID=1000
       - PGID=1000
       - TZ=America/New_York
-      - TRANSMISSION_WEB_HOME= #optional
       - USER={{ transmission_user }}
       - PASS={{ transmission_pass }}
     volumes:
