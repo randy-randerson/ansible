@@ -54,9 +54,12 @@
         key: "{{ media_group }}"
       register: media_group_info
 
+    - debug:
+        msg: "{{ media_group_info }}"
+
     - name: Set media_pgid fact
       ansible.builtin.set_fact:
-        media_pgid: "{{ media_group_info.group[media_group][1] }}"
+        media_pgid: "{{ (media_group_info.group | default({})).get(media_group, [])[1] }}"
 
     - name: Add Transmission User
       ansible.builtin.user:
@@ -137,6 +140,6 @@
         project_src: "{{ transmission_home }}/config"
         state: restarted
       tags: restart_transmission
-  roles:
-    - role: geerlingguy.git
-    - role: geerlingguy.docker
+  # roles:
+  #   - role: geerlingguy.git
+  #   - role: geerlingguy.docker
