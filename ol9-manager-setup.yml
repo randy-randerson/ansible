@@ -48,12 +48,35 @@
     #     state: directory
     #     mode: 0750
 
+    - name: Get media group ID
+      ansible.builtin.getent:
+        database: group
+        key: "{{ media_group }}"
+      when: media_group_result.changed
+      register: media_group_info
+
+    - name: Set media_pgid fact
+      ansible.builtin.set_fact:
+        media_pgid: "{{ media_group_info.group[media_group][1] }}"
+      when: media_group_result.changed
+
     - name: Add Transmission User
       ansible.builtin.user:
         name: "{{ transmission_user }}"
         group: "{{ media_group }}"
         shell: /bin/false
         home: /home/transmission
+
+    - name: Get transmission user info
+      ansible.builtin.getent:
+        database: passwd
+        key: "{{ transmission_user }}"
+      register: transmission_user_info
+
+    - name: Set transmission_puid fact
+      ansible.builtin.set_fact:
+        transmission_puid: "{{ transmission_user_info.passwd[transmission_user][2] }}"
+      when: transmission_user_info.changed
 
     - name: Create Transmission config dir
       ansible.builtin.file:

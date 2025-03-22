@@ -4,8 +4,8 @@ services:
     image: lscr.io/linuxserver/transmission:latest
     container_name: transmission
     environment:
-      - PUID=1000
-      - PGID=1000
+      - PUID={{ transmission_puid }}
+      - PGID={{ media_pgid }}
       - TZ=America/New_York
       - USER={{ transmission_user }}
       - PASS={{ transmission_pass }}
