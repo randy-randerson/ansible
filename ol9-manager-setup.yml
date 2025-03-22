@@ -52,13 +52,12 @@
       ansible.builtin.getent:
         database: group
         key: "{{ media_group }}"
-      when: media_group_result.changed
       register: media_group_info
 
     - name: Set media_pgid fact
       ansible.builtin.set_fact:
         media_pgid: "{{ media_group_info.group[media_group][1] }}"
-      when: media_group_result.changed
+      when: media_group_info.changed
 
     - name: Add Transmission User
       ansible.builtin.user:
