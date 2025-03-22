@@ -57,7 +57,6 @@
     - name: Set media_pgid fact
       ansible.builtin.set_fact:
         media_pgid: "{{ media_group_info.group[media_group][1] }}"
-      when: media_group_info.changed
 
     - name: Add Transmission User
       ansible.builtin.user:
@@ -75,7 +74,6 @@
     - name: Set transmission_puid fact
       ansible.builtin.set_fact:
         transmission_puid: "{{ transmission_user_info.passwd[transmission_user][2] }}"
-      when: transmission_user_info.changed
 
     - name: Create Transmission config dir
       ansible.builtin.file:
