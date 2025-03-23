@@ -22,3 +22,27 @@ plex_token: !vault |
   65626435363636643737333765626565333962653635393935613534633034663739386161313433
   3131313935303166390a613839383632396261643830333166636565626433326137306131633735
   66373636653533633262366431316263326639363866326330373231343936363630
+
+bazarr_yum_packages:
+  - python3-dev
+  - python3-pip
+  - python3-distutils
+
+deluge_apt_packages:
+  - deluged
+  - deluge-web
+  - deluge-console
+
+bazarr_url: https://github.com/morpheus65535/bazarr/releases/latest/download/bazarr.zip
+bazarr_dir: /opt/bazarr
+
+lidarr_user: lidarr
+media_group: media
+lidarr_version: 0.8.1.2135
+deluge_user: deluge
+deluge_home: "/home/{{ deluge_user }}"
+deluge_ports:
+  - 8112/tcp
+  - 6881/udp
+  - 6881/tcp
+  - 58846/tcp

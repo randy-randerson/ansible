@@ -3,6 +3,82 @@
 - name: Setup rhel media manager
   hosts: ol9-mediamgr
   become: true
+  vars_files:
+    - vars/group_vars.yml
+  tasks:
+    - name: Install mullvad
+      ansible.builtin.include_tasks: include-install-mullvad-ol9.yml
+
+    - name: Setup NFS mount
+      tags: mount
+      block:
+        - name: Install NFS utils
+          ansible.builtin.dnf:
+            name: nfs-utils
+            state: present
+
+        - name: Create Media Mount Point
+          ansible.builtin.command: mkdir -p /Media
+
+        - name: Mount Media Share
+          ansible.posix.mount:
+            path: /Media
+            src: 192.168.1.33:/mnt/user/Media
+            fstype: nfs
+            opts: _netdev,defaults,auto,noatime,nofail,x-systemd.automount
+            state: mounted
+
+    - name: Ensure group "media" exists
+      ansible.builtin.group:
+        name: "{{ media_group }}"
+        state: present
+
+    - name: Add Deluge User
+      ansible.builtin.user:
+        name: "{{ deluge_user }}"
+        group: "{{ media_group }}"
+        shell: /bin/false
+        home: /home/deluge
+
+    - name: Create Deluge config dir
+      ansible.builtin.file:
+        path: "{{ deluge_home }}/config"
+        owner: "{{ deluge_user }}"
+        group: "{{ media_group }}"
+        state: directory
+        mode: 0750
+
+    - name: Template Deluge Docker Compose file
+      ansible.builtin.template:
+        src: templates/deluge-docker-compose.yml
+        dest:  "{{ deluge_home }}/config/docker-compose.yml"
+        owner: "{{ deluge_user }}"
+        group: "{{ media_group }}"
+        mode: 0755
+      notify: Restart Deluge services
+
+    - name: Start Deluge services
+      community.docker.docker_compose_v2:
+        project_src: "{{ deluge_home }}/config"
+      register: compose_output
+
+    - name: Show compose output
+      ansible.builtin.debug:
+        var: compose_output
+
+    - name: Add Transmission Ports
+      ansible.posix.firewalld:
+        port: "{{ item }}"
+        permanent: true
+        state: enabled
+      loop: "{{ deluge_ports }}"
+
+  handlers:
+    - name: Restart Deluge services
+      community.docker.docker_compose_v2:
+        project_src: "{{ transmission_home }}/config"
+        state: restarted
+      tags: restart_transmission
   roles:
     - role: geerlingguy.git
     - role: geerlingguy.docker
