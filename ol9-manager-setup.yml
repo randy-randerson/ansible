@@ -81,4 +81,8 @@
       tags: restart_transmission
   roles:
     - role: geerlingguy.git
+      tags: git
     - role: geerlingguy.docker
+      tags: docker
+    - role: geerlingguy.repo-epel
+      tags: epel
