@@ -33,8 +33,11 @@ deluge_apt_packages:
   - deluge-web
   - deluge-console
 
-bazarr_url: https://github.com/morpheus65535/bazarr/releases/latest/download/bazarr.zip
-bazarr_dir: /opt/bazarr
+bazarr_user: bazarr
+bazarr_home: "/home/{{ bazarr_user }}"
+bazarr_dir: "/opt/{{ bazarr_user }}"
+bazarr_ports:
+  - 6767/tcp
 
 lidarr_user: lidarr
 media_group: media
