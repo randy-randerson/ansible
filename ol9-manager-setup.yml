@@ -33,52 +33,28 @@
         name: "{{ media_group }}"
         state: present
 
-    - name: Add Deluge User
-      ansible.builtin.user:
-        name: "{{ deluge_user }}"
-        group: "{{ media_group }}"
-        shell: /bin/false
-        home: /home/deluge
+    - name: Include Deluge Setup
+      ansible.builtin.include_tasks: include-install-deluge.yml
+      tags: deluge
 
-    - name: Create Deluge config dir
-      ansible.builtin.file:
-        path: "{{ deluge_home }}/config"
-        owner: "{{ deluge_user }}"
-        group: "{{ media_group }}"
-        state: directory
-        mode: 0750
-
-    - name: Template Deluge Docker Compose file
-      ansible.builtin.template:
-        src: templates/deluge-docker-compose.yml
-        dest:  "{{ deluge_home }}/config/docker-compose.yml"
-        owner: "{{ deluge_user }}"
-        group: "{{ media_group }}"
-        mode: 0755
-      notify: Restart Deluge services
-
-    - name: Start Deluge services
-      community.docker.docker_compose_v2:
-        project_src: "{{ deluge_home }}/config"
-      register: compose_output
-
-    - name: Show compose output
-      ansible.builtin.debug:
-        var: compose_output
-
-    - name: Add Transmission Ports
-      ansible.posix.firewalld:
-        port: "{{ item }}"
-        permanent: true
-        state: enabled
-      loop: "{{ deluge_ports }}"
+    - name: Include Bazarr Setup
+      ansible.builtin.include_tasks: include-install-bazarr.yml
+      tags: bazarr
 
   handlers:
     - name: Restart Deluge services
       community.docker.docker_compose_v2:
-        project_src: "{{ transmission_home }}/config"
+        project_src: "{{ deluge_home }}/config"
         state: restarted
-      tags: restart_transmission
+      tags: restart_deluge
+
+    - name: Restart Bazarr services
+      community.docker.docker_compose_v2:
+        project_src: "{{ bazarr_home }}/config"
+        state: restarted
+      tags:
+        - restart_bazarr
+        - bazarr
   roles:
     - role: geerlingguy.git
       tags: git

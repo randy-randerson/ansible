@@ -5,8 +5,8 @@ services:
     pull_policy: always
     container_name: deluge
     environment:
-      - PUID=1000
-      - PGID=1000
+      - PUID={{ deluge_uid }}
+      - PGID={{ deluge_gid }}
       - TZ=America/New_York
       - DELUGE_LOGLEVEL=error #optional
     volumes:

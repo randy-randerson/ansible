@@ -1,0 +1,64 @@
+---
+
+- name: Deluge Setup tasks
+  tags: deluge
+  block:
+    - name: Add Deluge User
+      ansible.builtin.user:
+        name: "{{ deluge_user }}"
+        group: "{{ media_group }}"
+        shell: /bin/false
+        home: /home/deluge
+
+    - name: Get passwd entry for user 'deluge'
+      ansible.builtin.getent:
+        database: passwd
+        key: deluge
+      register: deluge_passwd
+
+    - name: Get group entry for group 'deluge'
+      ansible.builtin.getent:
+        database: group
+        key: deluge
+      register: deluge_group
+
+    - name: Set UID fact
+      ansible.builtin.set_fact:
+        deluge_uid: "{{ deluge_passwd.ansible_facts.getent_passwd.deluge[1] }}"
+
+    - name: Set GID fact
+      ansible.builtin.set_fact:
+        deluge_gid: "{{ deluge_group.ansible_facts.getent_group.deluge[1] }}"
+
+    - name: Create Deluge config dir
+      ansible.builtin.file:
+        path: "{{ deluge_home }}/config"
+        owner: "{{ deluge_user }}"
+        group: "{{ media_group }}"
+        state: directory
+        mode: 0750
+
+    - name: Template Deluge Docker Compose file
+      ansible.builtin.template:
+        src: templates/deluge-docker-compose.yml
+        dest:  "{{ deluge_home }}/config/docker-compose.yml"
+        owner: "{{ deluge_user }}"
+        group: "{{ media_group }}"
+        mode: 0755
+      notify: Restart Deluge services
+
+    - name: Start Deluge services
+      community.docker.docker_compose_v2:
+        project_src: "{{ deluge_home }}/config"
+      register: compose_output
+
+    - name: Show compose output
+      ansible.builtin.debug:
+        var: compose_output
+
+    - name: Add Deluge Ports
+      ansible.posix.firewalld:
+        port: "{{ item }}"
+        permanent: true
+        state: enabled
+      loop: "{{ deluge_ports }}"

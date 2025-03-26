@@ -1,0 +1,94 @@
+---
+- name: Install Bazarr
+  tags: bazarr
+  block:
+    - name: Ensure bazarr group exists
+      ansible.builtin.group:
+        name: "{{ bazarr_user }}"
+        state: present
+
+    - name: Add Bazarr User
+      ansible.builtin.user:
+        name: "{{ bazarr_user }}"
+        group: "{{ bazarr_user }}"
+        shell: /bin/false
+        home: "{{ bazarr_home }}"
+
+    - name: Create Bazarr Dir
+      ansible.builtin.file:
+        path: "{{ bazarr_dir }}"
+        state: directory
+        owner: "{{ bazarr_user }}"
+        group: "{{ media_group }}"
+
+    - name: Create Bazarr config dir
+      ansible.builtin.file:
+        path: "{{ bazarr_home }}/config"
+        owner: "{{ bazarr_user }}"
+        group: "{{ media_group }}"
+        state: directory
+        mode: 0750
+
+    - name: Get passwd entry for user 'bazarr'
+      ansible.builtin.getent:
+        database: passwd
+        key: bazarr
+      register: bazarr_passwd
+
+    - name: Get group entry for group 'bazarr'
+      ansible.builtin.getent:
+        database: group
+        key: bazarr
+      register: bazarr_group
+
+    - name: Set UID fact
+      ansible.builtin.set_fact:
+        bazarr_uid: "{{ bazarr_passwd.ansible_facts.getent_passwd.bazarr[1] }}"
+
+    - name: Set GID fact
+      ansible.builtin.set_fact:
+        bazarr_gid: "{{ bazarr_group.ansible_facts.getent_group.bazarr[1] }}"
+
+    - name: Show UID and GID
+      ansible.builtin.debug:
+        msg: "User 'bazarr' UID={{ bazarr_uid }}, GID={{ bazarr_gid }}"
+
+    - name: Template Bazarr Docker Compose file
+      ansible.builtin.template:
+        src: templates/bazarr-docker-compose.yml
+        dest: "{{ bazarr_home }}/config/docker-compose.yml"
+        owner: "{{ bazarr_user }}"
+        group: "{{ media_group }}"
+        mode: 0755
+      notify: Restart Bazarr services
+
+    - name: Change Bazarr Dir Ownership
+      ansible.builtin.file:
+        path: "{{ bazarr_dir }}"
+        state: directory
+        recurse: true
+        owner: "{{ bazarr_user }}"
+        group: "{{ media_group }}"
+
+    - name: Add Bazarr Ports
+      ansible.posix.firewalld:
+        port: "{{ item }}"
+        permanent: true
+        state: enabled
+      loop: "{{ bazarr_ports }}"
+
+    - name: Start Bazarr services
+      community.docker.docker_compose_v2:
+        project_src: "{{ bazarr_home }}/config"
+      register: compose_output
+
+    - name: Show compose output
+      ansible.builtin.debug:
+        var: compose_output
+
+    # - name: Enable Bazarr Service
+    #   ansible.builtin.systemd:
+    #     name: bazarr
+    #     daemon_reload: yes
+    #     enabled: yes
+    #     state: started
