@@ -66,8 +66,7 @@
 
     - name: Set UID fact
       ansible.builtin.set_fact:
-        plex_uid: "{{ plex_passwd.ansible_facts.getent_passwd.plex[1] }}"
-
+        plex_uid: "{{ plex_passwd.ansible_facts.getent_passwd[plex_user][1] }}"
     - name: Set GID fact
       ansible.builtin.set_fact:
         plex_gid: "{{ plex_group.ansible_facts.getent_group.plex[1] }}"
