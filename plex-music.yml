@@ -1,40 +1,80 @@
 ---
 # sudo docker run -d --name=plex --net=host -e PUID=1008 -e PGID=1008 -e VERSION=docker -v /home/plex:/config -v /Media/Music:/music --restart unless-stopped lscr.io/linuxserver/plex:latest
 # ansible-playbook -i localhost, plex-music.yml -e upgrade=True
+# To copy Plex volume data from an older server to new one run with -e rsync=True
 
 - name: Install Plex Docker
-  hosts: manager
-  gather_facts: no
+  hosts: ol9-mediamgr
+  gather_facts: false
   remote_user: randy
-  become: yes
-  vars_files:
-    - vars/group_vars.yml
+  become: true
   tasks:
     - name: Create Plex User
       ansible.builtin.user:
-        name: plex
+        name: "{{ plex_user }}"
         shell: /bin/false
-        home: /home/plex
+        home: "{{ plex_home }}"
 
-    - name: Install Docker Pip Package
-      pip:
+    - name: Synchronize Plex volume from old server to new
+      ansible.posix.synchronize:
+        src: "{{ plex_home }}/Library/"
+        dest: "{{ plex_home }}/Library/"
+        mode: push
+        recursive: true
+      delegate_to: media-manager
+      become: true
+      tags: rsync
+      when: "rsync == 'True'"
+
+    - name: Update Plex config dir perms
+      ansible.builtin.file:
+        path: "{{ plex_home }}"
+        state: directory
+        recurse: true
+        owner: "{{ plex_user }}"
+        group: "{{ plex_user }}"
+
+    - name: Install DNF Packages
+      ansible.builtin.dnf:
         name: "{{ item }}"
         state: present
-        extra_args: --ignore-installed PyYAML
-      loop:
-        - docker
+      loop: "{{ plex_dnf_packages }}"
+
+    - name: Install Pip Packages
+      ansible.builtin.pip:
+        name: "{{ item }}"
+        state: present
+      loop: "{{ plex_pip_packages }}"
 
     - name: Remove Container
-      docker_container:
+      community.docker.docker_container:
         name: PlexMediaServer
         state: absent
       when: "upgrade == 'True'"
 
+    - name: Get passwd entry for user 'plex'
+      ansible.builtin.getent:
+        database: passwd
+        key: "{{ plex_user }}"
+      register: plex_passwd
+
+    - name: Get group entry for group 'plex'
+      ansible.builtin.getent:
+        database: group
+        key: "{{ plex_user }}"
+      register: plex_group
+
+    - name: Set UID fact
+      ansible.builtin.set_fact:
+        plex_uid: "{{ plex_passwd.ansible_facts.getent_passwd[plex_user][1] }}"
+    - name: Set GID fact
+      ansible.builtin.set_fact:
+        plex_gid: "{{ plex_group.ansible_facts.getent_group[plex_user][1] }}"
     - name: Install Plex Container
-      docker_container:
+      community.docker.docker_container:
         name: PlexMediaServer
         image: linuxserver/plex
-        pull: yes
+        pull: true
         state: started
         restart_policy: unless-stopped
         network_mode: host
@@ -49,10 +89,10 @@
     #      - "32413:32413/udp"
     #      - "32414:32414/udp"
         env:
-          PUID: "1008"
-          PGID: "1008"
+          PUID: "{{ plex_uid }}"
+          PGID: "{{ plex_gid }}"
           VERSION: "docker"
           #PLEX_CLAIM: "{{ plex_token }}"
         volumes:
-          - /home/plex:/config
+          - "{{ plex_home }}:/config"
           - /Media/Music:/music

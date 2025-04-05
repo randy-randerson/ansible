@@ -49,3 +49,11 @@ deluge_ports:
   - 6881/udp
   - 6881/tcp
   - 58846/tcp
+
+plex_user: plex
+plex_home: "/home/{{ plex_user }}"
+plex_dnf_packages:
+  - python3-pip
+plex_pip_packages:
+  - packaging
+  - requests
