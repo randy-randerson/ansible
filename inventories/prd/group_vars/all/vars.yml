@@ -57,3 +57,5 @@ plex_dnf_packages:
 plex_pip_packages:
   - packaging
   - requests
+
+rsync: false
