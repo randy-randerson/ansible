@@ -1,4 +1,4 @@
 ---
 
-- import_tasks: install-python38.yml
+- ansible.builtin.import_tasks: install-python38.yml
   tags: python38

@@ -1,23 +1,23 @@
 ---
 
 - name: Install Packages
-  yum:
+  ansible.builtin.dnf:
     name: ['gcc', 'openssl-devel', 'bzip2-devel', 'libffi-devel', 'sqlite-devel']
     state: present
 
 - name: Download Python 3.8
-  unarchive:
+  ansible.builtin.unarchive:
     src: https://www.python.org/ftp/python/3.8.5/Python-3.8.5.tgz
     dest: /usr/src
-    remote_src: yes
+    remote_src: true
 
 - name: Install Python 3.8
-  shell:
+  ansible.builtin.shell:
     cmd: ./configure --enable-optimizations --enable-loadable-sqlite-extensions && make altinstall
     chdir: /usr/src/Python-3.8.5
     creates: /usr/local/bin/python3.8
 
 - name: Cleanup Install Files
-  file:
+  ansible.builtin.file:
     path: /usr/src/Python-3.8.5.tgz
     state: absent

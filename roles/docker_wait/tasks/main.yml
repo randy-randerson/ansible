@@ -1,7 +1,7 @@
 ---
 
 - name: Docker Wait
-  docker_container_info:
+  community.docker.docker_container_info:
     name: postgres
   register: result
   until: ("running" in result.container.State.Status)
@@ -9,5 +9,5 @@
   delay: 10
   failed_when: "result.container.State.Status != 'running'"
 
-- debug:
+- ansible.builtin.debug:
     msg: "{{ result.container.State.Status }}"

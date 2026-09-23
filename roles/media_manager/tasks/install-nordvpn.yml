@@ -1,0 +1,7 @@
+---
+
+- name: Install NordVPN
+  ansible.builtin.get_url:
+    url: https://downloads.nordcdn.com/apps/linux/install.sh
+    dest: /tmp/install.sh
+    mode: '0777'

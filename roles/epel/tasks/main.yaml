@@ -1,4 +1,4 @@
 - name: Install EPEL
-  yum:
+  ansible.builtin.dnf:
     name: epel-release
     state: latest

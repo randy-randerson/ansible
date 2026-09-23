@@ -1,5 +1,6 @@
 ---
-# sudo docker run -d --name=plex --net=host -e PUID=1008 -e PGID=1008 -e VERSION=docker -v /home/plex:/config -v /Media/Music:/music --restart unless-stopped lscr.io/linuxserver/plex:latest
+# sudo docker run -d --name=plex --net=host -e PUID=1008 -e PGID=1008
+# -e VERSION=docker -v /home/plex:/config -v /Media/Music:/music --restart unless-stopped lscr.io/linuxserver/plex:latest
 # ansible-playbook -i localhost, plex-music.yml -e upgrade=True
 # To copy Plex volume data from an older server to new one run with -e rsync=True
 
@@ -92,7 +93,7 @@
           PUID: "{{ plex_uid }}"
           PGID: "{{ plex_gid }}"
           VERSION: "docker"
-          #PLEX_CLAIM: "{{ plex_token }}"
+          # PLEX_CLAIM: "{{ plex_token }}"
         volumes:
           - "{{ plex_home }}:/config"
           - /Media/Music:/music

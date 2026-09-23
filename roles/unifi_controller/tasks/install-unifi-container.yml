@@ -1,7 +1,7 @@
 ---
 
 - name: Install Docker Pip Package
-  pip:
+  ansible.builtin.pip:
     name: "{{ item }}"
     state: present
     extra_args: --ignore-installed PyYAML
@@ -10,16 +10,16 @@
     - docker-compose
 
 - name: Remove Container
-  docker_container:
+  community.docker.docker_container:
     name: unifi-controller
     state: absent
   when: "upgrade == 'True'"
 
 - name: Run Unifi Controller
-  docker_container:
+  community.docker.docker_container:
     name: unifi-controller
     image: linuxserver/unifi-controller
-    pull: yes
+    pull: true
     state: started
     restart_policy: unless-stopped
     ports:
