@@ -24,9 +24,10 @@
           ansible.posix.mount:
             path: /Media
             src: 192.168.1.33:/mnt/user/Media
-            fstype: nfs
-            opts: _netdev,defaults,auto,noatime,nofail,x-systemd.automount
+            fstype: nfs4
+            opts: _netdev,noatime,nofail,x-systemd.automount,timeo=600,retrans=2,hard
             state: mounted
+
 
     - name: Ensure group "media" exists
       ansible.builtin.group:
