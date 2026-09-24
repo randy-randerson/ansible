@@ -1,0 +1,17 @@
+---
+exclude_paths:
+  - .git/
+  - .venv/
+  - .github/
+  - .idea/
+  - .vscode/
+
+skip_list:
+  - command-instead-of-module
+  - name[missing]
+  - no-changed-when
+  - package-latest
+  - risky-file-permissions
+  - risky-shell-pipe
+  - schema[playbook]
+  - var-naming[no-role-prefix]

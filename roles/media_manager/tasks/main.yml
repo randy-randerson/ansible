@@ -1,0 +1,27 @@
+---
+- ansible.builtin.import_tasks: install-sonarr.yml
+  tags: sonarr
+
+- ansible.builtin.import_tasks: install-radarr.yml
+  tags: radarr
+
+- ansible.builtin.import_tasks: install-nordvpn.yml
+  tags: nordvpn
+
+- ansible.builtin.import_tasks: install-deluge.yml
+  tags: deluge
+
+- ansible.builtin.import_tasks: install-jackett.yml
+  tags: jackett
+
+- ansible.builtin.import_tasks: install-unpackerr.yml
+  tags: unpackerr
+
+- ansible.builtin.import_tasks: install-lidarr.yml
+  tags: lidarr
+
+- ansible.builtin.import_tasks: install-bazarr.yml
+  tags: bazarr
+
+- ansible.builtin.import_tasks: install-flaresolverr.yml
+  tags: flaresolverr

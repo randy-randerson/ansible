@@ -12,16 +12,16 @@
     owner: jackett
     group: jackett
 
-#- name: Install Pre-reqs
-#  yum:
-#    name: libicu
-#    state: present
+# - name: Install Pre-reqs
+#   yum:
+#     name: libicu
+#     state: present
 
 - name: Download Jackett
   ansible.builtin.unarchive:
     src: https://github.com/Jackett/Jackett/releases/download/v0.20.1027/Jackett.Binaries.LinuxAMDx64.tar.gz
     dest: /opt/Jackett
-    remote_src: yes
+    remote_src: true
 
 - name: Install Jackett
   ansible.builtin.command: ./install_service_systemd.sh
@@ -36,8 +36,8 @@
 - name: Enable Jacket Service
   ansible.builtin.systemd:
     name: jackett
-    daemon_reload: yes
-    enabled: yes
+    daemon_reload: true
+    enabled: true
     state: started
 
 - name: Add Jackett Port

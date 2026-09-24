@@ -1,9 +1,9 @@
 ---
 - name: Install Mullvad VPN
   hosts: manager
-  gather_facts: no
+  gather_facts: false
   remote_user: randy
-  become: yes
+  become: true
   vars_files:
     - vars/group_vars.yml
   tasks:

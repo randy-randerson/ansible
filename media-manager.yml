@@ -2,13 +2,13 @@
 
 - name: Media Manager
   hosts: manager
-  gather_facts: no
+  gather_facts: false
   remote_user: randy
-  become: yes
+  become: true
   vars_files:
     - vars/group_vars.yml
   vars:
-    #ansible_python_interpreter: /root/.pyenv/shims/python
+    # ansible_python_interpreter: /root/.pyenv/shims/python
   post_tasks:
     - name: Install NFS helper
       ansible.builtin.apt:
@@ -29,10 +29,10 @@
         state: mounted
       tags: mount
   roles:
-    #    - epel
-    #    - pip
+    # - epel
+    # - pip
     - role: docker
       tags: docker
-    - role: docker-compose
+    - role: docker_compose
       tags: docker
-    - media-manager
+    - media_manager

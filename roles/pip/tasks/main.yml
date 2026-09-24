@@ -1,9 +1,9 @@
 - name: Install Pip
-  yum:
+  ansible.builtin.dnf:
     name: python-pip
     state: present
 
 - name: Update Pip
-  pip:
+  ansible.builtin.pip:
     name: pip
     state: latest

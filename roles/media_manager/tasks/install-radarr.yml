@@ -21,8 +21,8 @@
   ansible.builtin.get_url:
     url: http://radarr.servarr.com/v1/update/master/updatefile?os=linux&runtime=netcore&arch=x64
     dest: /tmp
-    mode: 0766
-    validate_certs: no
+    mode: '0766'
+    validate_certs: false
 
 - name: Unpack Radarr
   ansible.builtin.unarchive:
@@ -31,7 +31,7 @@
     owner: radarr
     dest: /tmp
     extra_opts:
-    remote_src: yes
+    remote_src: true
 
 - name: Move Radarr Directory
   ansible.builtin.copy:
@@ -39,7 +39,7 @@
     dest: /opt/Radarr
     group: radarr
     owner: radarr
-    remote_src: yes
+    remote_src: true
 
 - name: Copy Service File
   ansible.builtin.template:
@@ -55,8 +55,8 @@
 - name: Enable Radarr Service
   ansible.builtin.systemd:
     name: Radarr
-    daemon_reload: yes
-    enabled: yes
+    daemon_reload: true
+    enabled: true
     state: started
 
 - name: Cleanup Install Files
